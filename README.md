@@ -1,17 +1,18 @@
 # PlacePrep - Placement Preparation Platform
 
-A comprehensive full-stack web application designed to help students prepare for placement interviews and assessments across various engineering departments.
+A full-stack web application to help engineering students prepare for campus placements with mock tests, interview practice, AI explanations, and more.
 
 ## 🚀 Features
 
 ### Core Functionality
 - **Multi-Department Support**: CSE, ECE, EEE, Civil, Mechanical, Chemical Engineering
-- **Mock Tests**: Practice assessments with real-time scoring
-- **Interview Preparation**: Comprehensive interview question bank and tips
+- **Mock Tests**: Practice assessments with real-time scoring, AI explanations, and progress tracking
+- **Interview Preparation**: Comprehensive interview question bank and tips, AI-powered mock interviews
 - **Aptitude Tests**: Quantitative, logical, and verbal reasoning practice
 - **Notes Management**: Personal note-taking and sharing system
 - **Progress Tracking**: Monitor learning progress across different modules
 - **User Authentication**: Secure login with Google OAuth integration
+- **AI Integration**: Google Gemini API for explanations and interview feedback
 
 ### Technical Features
 - **Responsive Design**: Mobile-friendly interface
@@ -42,57 +43,55 @@ A comprehensive full-stack web application designed to help students prepare for
 ## 📁 Project Structure
 
 ```
-Final_Project/
-├── NEW_PROJECT/
-│   ├── server.js                 # Main server file
-│   ├── package.json              # Dependencies and scripts
-│   ├── package-lock.json         # Dependencies lock file
-│   ├── .gitignore                # Git ignore file
-│   ├── README.md                 # This README file
-│   ├── .env                      # Environment variables (not committed)
-│   ├── serviceAccountKey.json    # Service account key (not committed)
-│   ├── models/                   # Database models
-│   │   ├── Question.js
-│   │   ├── MockTestProgress.js
-│   │   ├── InterviewFeedback.js
-│   │   └── Note.js
-│   ├── utils/
-│   │   └── emailService.js       # Email functionality
-│   ├── HTML/
-│   │   ├── landingpage.html      # Homepage
-│   │   ├── login.html            # Authentication
-│   │   ├── signup.html           # Signup page
-│   │   ├── placement_website.html # Main dashboard
-│   │   ├── mocktest.html         # Mock test interface
-│   │   ├── module.html           # Module selection
-│   │   ├── interview.html        # Interview preparation
-│   │   ├── notes.html            # Notes management
-│   │   ├── profile.html          # User profile
-│   │   ├── shownotes.html        # Show notes
-│   │   ├── code.html             # Code display
-│   │   ├── Civil_department.html # Civil department
-│   │   ├── cse_department.html   # CSE department
-│   │   ├── ece_department.html   # ECE department
-│   │   ├── mechanical_department.html # Mechanical department
-│   │   ├── chemical.html         # Chemical department
-│   │   ├── electrical.html       # Electrical department
-│   │   ├── apptitude.html        # Aptitude test
-│   │   ├── 404.html             # 404 error page
-│   │   └── js/                 # JavaScript modules
-│   │       ├── aptitude_data.js  # Aptitude test data
-│   │       ├── chemical_data.js  # Chemical department data
-│   │       ├── civil_data.js     # Civil department data
-│   │       ├── cse_data.js       # CSE department data
-│   │       ├── ece_data.js       # ECE department data
-│   │       ├── electrical_data.js # Electrical department data
-│   │       ├── interview_data.js  # Interview data
-│   │       ├── mechanical_data.js # Mechanical department data
-│   │       ├── mocktest_data.js   # Mock test data
-│   │       └── notes_data.js      # Notes data
-│   ├── checkDatabase.js          # Database verification
-│   ├── importQuestions.js        # Data import utility
-│   ├── resetDatabase.js          # Database reset utility
-│   └── seedAssessments.js        # Assessment data seeding
+Place-Prep/
+├── server.js
+├── package.json
+├── .gitignore
+├── README.md
+├── .env (not committed)
+├── serviceAccountKey.json (not committed)
+├── models/
+│ ├── Question.js
+│ ├── MockTestProgress.js
+│ ├── InterviewFeedback.js
+│ └── Note.js
+├── utils/
+│ └── emailService.js
+├── HTML/
+│ ├── landingpage.html
+│ ├── login.html
+│ ├── signup.html
+│ ├── placement_website.html
+│ ├── mocktest.html
+│ ├── module.html
+│ ├── interview.html
+│ ├── notes.html
+│ ├── profile.html
+│ ├── shownotes.html
+│ ├── code.html
+│ ├── Civil_department.html
+│ ├── cse_department.html
+│ ├── ece_department.html
+│ ├── mechanical_department.html
+│ ├── chemical.html
+│ ├── electrical.html
+│ ├── apptitude.html
+│ ├── 404.html
+│ └── js/
+│ ├── aptitude_data.js
+│ ├── chemical_data.js
+│ ├── civil_data.js
+│ ├── cse_data.js
+│ ├── ece_data.js
+│ ├── electrical_data.js
+│ ├── interview_data.js
+│ ├── mechanical_data.js
+│ ├── mocktest_data.js
+│ └── notes_data.js
+├── importQuestions.js
+├── seedAssessments.js
+├── checkDatabase.js
+├── resetDatabase.js
 ```
 
 ## 🚀 Getting Started
@@ -245,4 +244,4 @@ For support and questions:
 
 ---
 
-**Note**: This is a final year project for Amrita Vishwa Vidyapeetham. For academic use only. 
+**Note**: This is a final year project for Amrita Vishwa Vidyapeetham. For academic use only.

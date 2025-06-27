@@ -57,7 +57,7 @@ console.log("GOOGLE_CLIENT_ID Status: Loaded");
 const googleClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID || 'test_client_id');
 
 const app = express();
-const port = process.env.PORT || 3001;
+const port = process.env.PORT || 3000;
 
 // Middleware
 app.use(cors());
@@ -562,41 +562,6 @@ app.get('/api/progress/:userId', async (req, res) => {
     } catch (error) {
         console.error('Error fetching user progress:', error);
         res.status(500).json({ message: 'Error fetching user progress' });
-    }
-});
-
-// Get questions by module
-app.get('/api/questions/:moduleId', async (req, res) => {
-    try {
-        const { moduleId } = req.params;
-        console.log('Fetching questions for module:', moduleId);
-
-        // Log the query we're about to execute
-        console.log('Executing query:', { moduleId });
-
-        const questions = await Question.find({ moduleId: moduleId });
-        console.log('Found questions:', questions.length);
-        console.log('First question sample:', questions[0] ? {
-            moduleId: questions[0].moduleId,
-            section: questions[0].section,
-            questionText: questions[0].questionText.substring(0, 50) + '...'
-        } : 'No questions found');
-
-        if (!questions || questions.length === 0) {
-            console.log('No questions found for module:', moduleId);
-            return res.status(404).json({ 
-                message: 'No questions found for this module',
-                moduleId: moduleId
-            });
-        }
-
-        res.json(questions);
-    } catch (error) {
-        console.error('Error fetching questions:', error);
-        res.status(500).json({ 
-            message: 'Error fetching questions',
-            error: error.message 
-        });
     }
 });
 
