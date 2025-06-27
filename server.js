@@ -18,25 +18,23 @@ const Note = require('./models/Note');
 const InterviewFeedback = require('./models/InterviewFeedback');
 
 // Initialize Firebase Admin with service account
+// Initialize Firebase Admin with service account
 let firebaseAdminInitialized = false;
 try {
-    let serviceAccount;
-    if (process.env.FIREBASE_SERVICE_ACCOUNT) {
-        // In production (e.g., Render), load from environment variable
-        serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT);
-    } else {
-        // In local development, load from file
-        serviceAccount = require('./serviceAccountKey.json');
-    }
+    // On Render, the secret file will be available at this path.
+    // In local development, this path won't exist, and the catch block will run.
+    const serviceAccount = require('/etc/secrets/firebase-service-account.json');
     
     admin.initializeApp({
         credential: admin.credential.cert(serviceAccount)
     });
-    console.log('Firebase Admin initialized successfully');
+    console.log('Firebase Admin initialized successfully from Render Secret File');
     firebaseAdminInitialized = true;
 } catch (error) {
-    console.warn('Firebase Admin initialization skipped:', error.message);
-    // Don't exit the process, continue without Firebase Admin
+    // This catch block will now mostly run in your local development environment
+    // where the secret file doesn't exist.
+    console.warn('Firebase Admin initialization via Secret File failed. This is expected in local dev. Error:', error.message);
+    // You could add a fallback for local dev here if needed, but for now, this is fine.
 }
 
 const { OAuth2Client } = require('google-auth-library');
