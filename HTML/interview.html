@@ -1119,12 +1119,11 @@
 
         // Add new AI Interview functionality
         let conversationHistory = [];
-        const BACKEND_URL = window.location.origin; // This will automatically use the correct server URL
 
         async function callBackendAPI(data) {
             try {
                 console.log('Sending request to backend:', data);
-                const response = await fetch(`${BACKEND_URL}/api/ask-gemini`, {
+                const response = await fetch('/api/ask-gemini', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -1451,7 +1450,7 @@
                         const userId = localStorage.getItem('userId');
                         const department = document.getElementById('ai-department').value;
                         const interests = document.getElementById('ai-interests').value;
-                        const response = await fetch(`${BACKEND_URL}/api/ai-interview-feedback`, {
+                        const response = await fetch('/api/ai-interview-feedback', {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
                             body: JSON.stringify({
