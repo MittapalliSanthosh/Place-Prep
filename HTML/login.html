@@ -373,7 +373,7 @@
                 </div>
                 <span>or use your account</span>
                 <div class="social-login">
-                    <button id="google-signin-btn" class="google-signin-btn">
+                    <button type="button" id="google-signin-btn" class="google-signin-btn">
                         <img src="https://developers.google.com/identity/images/g-logo.png" alt="Google logo">
                         Sign in with Google
                     </button>
@@ -483,6 +483,8 @@
                 if (data.user) {
                     localStorage.setItem('user', JSON.stringify(data.user));
                     localStorage.setItem('firstName', data.user.firstName);
+                    localStorage.setItem('lastName', data.user.lastName);
+                    localStorage.setItem('department', data.user.department);
                 }
 
                 successMessageEl.textContent = "Login successful! Redirecting...";
@@ -498,7 +500,22 @@
         }
 
         // Google Sign-In handler
-        async function handleGoogleSignIn() {
+        async function handleGoogleSignIn(event) {
+            // Prevent any form submission behavior
+            if (event) {
+                event.preventDefault();
+                event.stopPropagation();
+            }
+            
+            // Temporarily remove required attributes to prevent validation interference
+            const emailField = document.getElementById('email');
+            const passwordField = document.getElementById('password');
+            const emailRequired = emailField.hasAttribute('required');
+            const passwordRequired = passwordField.hasAttribute('required');
+            
+            if (emailRequired) emailField.removeAttribute('required');
+            if (passwordRequired) passwordField.removeAttribute('required');
+            
             const provider = new firebase.auth.GoogleAuthProvider();
             provider.addScope('profile');
             provider.addScope('email');
@@ -523,8 +540,8 @@
                     photoURL: user.photoURL
                 };
 
-                // Show department selection modal instead of immediately proceeding
-                showDepartmentModal();
+                // First, try to authenticate without department (for existing users)
+                await handleGoogleAuthentication();
 
             } catch (error) {
                 console.error('Firebase Google Sign-In Error:', error);
@@ -540,6 +557,65 @@
                 }
                 
                 showError(errorMessage);
+            } finally {
+                // Restore required attributes
+                if (emailRequired) emailField.setAttribute('required', '');
+                if (passwordRequired) passwordField.setAttribute('required', '');
+            }
+        }
+
+        // Handle Google authentication (with or without department)
+        async function handleGoogleAuthentication(department = null) {
+            try {
+                // Get the user's ID token
+                const user = firebase.auth().currentUser;
+                if (!user) {
+                    throw new Error('No authenticated user found');
+                }
+
+                const idToken = await user.getIdToken();
+                console.log('Got ID token');
+
+                // Prepare request body
+                const requestBody = {
+                    token: idToken,
+                    email: tempGoogleUserData.email,
+                    displayName: tempGoogleUserData.displayName,
+                    photoURL: tempGoogleUserData.photoURL
+                };
+
+                // Add department if provided
+                if (department) {
+                    requestBody.department = department;
+                }
+
+                // Send to your backend
+                const response = await fetch('/api/auth/firebase', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(requestBody)
+                });
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    // Check if department is required for new user
+                    if (data.requiresDepartment) {
+                        console.log('New user detected, showing department selection');
+                        showDepartmentModal();
+                        return;
+                    }
+                    throw new Error(data.message || 'Firebase authentication failed on server');
+                }
+
+                // Success - handle login
+                handleSuccessfulLogin(data);
+
+            } catch (error) {
+                console.error('Error in Google authentication:', error);
+                showError(error.message);
             }
         }
 
@@ -578,39 +654,11 @@
             }
 
             try {
-                // Get the user's ID token
-                const user = firebase.auth().currentUser;
-                if (!user) {
-                    throw new Error('No authenticated user found');
-                }
-
-                const idToken = await user.getIdToken();
-                console.log('Got ID token');
-
-                // Send to your backend with department information
-                const response = await fetch('/api/auth/firebase', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        token: idToken,
-                        email: tempGoogleUserData.email,
-                        displayName: tempGoogleUserData.displayName,
-                        photoURL: tempGoogleUserData.photoURL,
-                        department: department
-                    })
-                });
-
-                const data = await response.json();
-
-                if (!response.ok) {
-                    throw new Error(data.message || 'Firebase authentication failed on server');
-                }
-
-                // Close modal and handle successful login
+                // Close modal first
                 closeDepartmentModal();
-                handleSuccessfulLogin(data);
+                
+                // Complete authentication with department
+                await handleGoogleAuthentication(department);
 
             } catch (error) {
                 console.error('Error completing Google sign-in:', error);
@@ -628,6 +676,8 @@
             localStorage.setItem('user', JSON.stringify(data.user));
             localStorage.setItem('isLoggedIn', 'true');
             localStorage.setItem('firstName', data.user.firstName || data.user.displayName);
+            localStorage.setItem('lastName', data.user.lastName || data.user.displayName);
+            localStorage.setItem('department', data.user.department || 'Not Specified');
             localStorage.setItem('userId', data.user.id); // Store userId for test submissions
 
             setTimeout(() => {

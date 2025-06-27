@@ -285,13 +285,15 @@ app.post('/api/signup', async (req, res) => {
 
         const savedUser = await newUser.save();
 
-        // Insecure: Return user object with ID, no token
+        // Return user object with ID and department
         res.status(201).json({
             message: 'User created successfully',
             user: {
                 id: savedUser._id,
                 firstName: savedUser.firstName,
+                lastName: savedUser.lastName,
                 email: savedUser.email,
+                department: savedUser.department
             }
         });
 
@@ -315,13 +317,15 @@ app.post('/api/login', async (req, res) => {
             return res.status(401).json({ message: 'Invalid credentials. Please check your email and password.' });
         }
 
-        // Insecure: Return user object with ID, no token
+        // Return user object with ID and department
         res.status(200).json({
             message: 'Login successful',
             user: {
                 id: user._id,
                 firstName: user.firstName,
-                email: user.email
+                lastName: user.lastName,
+                email: user.email,
+                department: user.department
             }
         });
 
@@ -415,6 +419,15 @@ app.post('/api/auth/firebase', async (req, res) => {
         let isNewUser = false;
 
         if (!user) {
+            // New user - check if department is provided
+            if (!department) {
+                return res.status(400).json({ 
+                    message: 'Department selection required for new users',
+                    requiresDepartment: true,
+                    userData: { email, displayName, firstName, lastName }
+                });
+            }
+
             isNewUser = true;
             // Create new user if doesn't exist
             const salt = await bcrypt.genSalt(10);
@@ -424,7 +437,7 @@ app.post('/api/auth/firebase', async (req, res) => {
                 firstName,
                 lastName,
                 email,
-                department: department || 'Not Set', // Use selected department
+                department: department, // Use selected department
                 password: hashedPassword // Random secure password
             });
 
@@ -434,7 +447,7 @@ app.post('/api/auth/firebase', async (req, res) => {
             // Send welcome email for new users
             await sendWelcomeEmail(email, firstName);
         } else {
-            // If user exists, update their department if a new one is provided
+            // Existing user - update department only if provided and different
             if (department && user.department !== department) {
                 user.department = department;
                 await user.save();
