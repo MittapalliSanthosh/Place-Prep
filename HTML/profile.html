@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en"> <!-- Theme class added by JS -->
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile Matrix - PlacePrep</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Orbitron:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+    <style>
+        /* ======== THEME VARIABLES (REFINED) ======== */
+        :root {
+            --bg-primary: #02040a;
+            --bg-secondary: #0a0c12; 
+            --bg-card: #0e1018;   
+            --bg-card-alt: #12141c; 
+            --bg-card-hover: #151515; /* Added for menu hover */
+            --bg-navbar: rgba(10, 10, 10, 0.6);
+            --bg-navbar-scrolled: rgba(2, 4, 10, 0.8);
+            --bg-theme-toggle-hover: #334155;
+
+            --text-primary: #E0E5F0;
+            --text-secondary: #94A3B8;
+            --text-muted: #64748B;   
+            --text-headings: #F8FAFC;
+            --text-logo: #FFFFFF;
+            --text-nav-link: #CBD5E1;
+            --text-nav-link-hover: var(--accent-secondary);
+            --text-on-accent: #FFFFFF; /* For buttons */
+            --text-theme-toggle: var(--text-primary);
+            --text-accent-glow: var(--accent-cyber-glow); 
+
+            --border-primary: #1E293B;  
+            --border-secondary: #334155; 
+            --border-hover: #444444; /* Added */
+            --border-highlight: var(--accent-secondary); 
+            --border-theme-toggle: var(--border-secondary);
+
+            --accent-primary: #F59E0B;     
+            --accent-primary-hover: #D97706;
+            --accent-secondary: #00D8FF;    
+            --accent-tertiary: #BE185D;     
+            --accent-progress: var(--accent-secondary); 
+            /* ACTIVITY STREAK COLORS (GitHub Style) */
+            --accent-streak-0: #161b22; /* Darker, like GitHub's empty */
+            --accent-streak-1: #0e4429;
+            --accent-streak-2: #006d32;
+            --accent-streak-3: #26a641;
+            --accent-streak-4: #39d353;
+
+
+            --gradient-highlight-start: var(--accent-tertiary); 
+            --gradient-highlight-end: var(--accent-secondary); 
+            --gradient-profile-avatar: linear-gradient(145deg, var(--accent-secondary), var(--accent-tertiary));
+
+            --shadow-card: 0 10px 25px rgba(0,0,0,0.5); 
+            --shadow-card-hover: 0 15px 35px rgba(0,0,0,0.6);
+            --shadow-text-glow: 0 0 15px rgba(var(--accent-secondary-rgb), 0.7);
+            
+            --accent-primary-rgb: 245,158,11;
+            --accent-secondary-rgb: 0,216,255; 
+            --accent-tertiary-rgb: 190,24,93;  
+            --accent-cyber-glow-rgb: 0,240,255;
+
+            --icon-overall-progress: var(--accent-secondary); 
+            --icon-topics-mastered:  var(--accent-tertiary);  
+            --icon-assessments-taken: #34D399; 
+            --icon-average-score:    var(--accent-primary); 
+        }
+
+        html.light-mode {
+            --bg-primary: #F3F4F6;    
+            --bg-secondary: #FFFFFF;
+            --bg-card: #FFFFFF;
+            --bg-card-alt: #F9FAFB; 
+            --bg-card-hover: #F1F3F5; /* Added for menu hover */
+            --bg-navbar: rgba(255, 255, 255, 0.7);
+            --bg-navbar-scrolled: rgba(255, 255, 255, 0.9);
+            --bg-theme-toggle-hover: #E5E7EB;
+
+            --text-primary: #111827;    
+            --text-secondary: #4B5563;  
+            --text-muted: #6B7280;
+            --text-headings: #111827;
+            --text-logo: var(--accent-primary);
+            --text-nav-link: var(--text-secondary);
+            --text-nav-link-hover: var(--accent-primary);
+            --text-on-accent: #FFFFFF;
+            --text-theme-toggle: var(--text-primary);
+            --text-accent-glow: var(--accent-cyber-glow);
+
+            --border-primary: #E5E7EB;   
+            --border-secondary: #D1D5DB; 
+            --border-hover: #ADB5BD; /* Added */
+            --border-highlight: var(--accent-secondary); 
+            --border-theme-toggle: var(--border-secondary);
+            
+            --accent-primary: #F97316; 
+            --accent-secondary: #0891B2; 
+            --accent-tertiary: #A21CAF;  
+            --accent-cyber-glow: #06B6D4; 
+            --accent-progress: var(--accent-primary); /* Can be same for light theme */
+
+            /* ACTIVITY STREAK COLORS - Light Mode (GitHub Style) */
+            --accent-streak-0: #EBEDF0; 
+            --accent-streak-1: #9BE9A8;
+            --accent-streak-2: #40C463;
+            --accent-streak-3: #30A14E;
+            --accent-streak-4: #216E39;
+
+            --gradient-profile-avatar: linear-gradient(145deg, var(--accent-secondary), var(--accent-primary));
+            --gradient-heading-border: linear-gradient(90deg, var(--accent-secondary) 30%, transparent);
+
+            --shadow-card: 0 8px 16px rgba(149, 157, 165, 0.15);
+            --shadow-card-hover: 0 12px 24px rgba(149, 157, 165, 0.2);
+            --shadow-text-glow: 0 0 10px rgba(var(--accent-cyber-glow-rgb), 0.2);
+
+            --accent-secondary-rgb: 8,145,178;
+            --accent-tertiary-rgb: 162,28,175;
+            --accent-cyber-glow-rgb: 6,182,212;
+            
+            --icon-overall-progress: var(--accent-secondary);
+            --icon-topics-mastered:  var(--accent-tertiary); 
+            --icon-assessments-taken: #059669; 
+            --icon-average-score:    var(--accent-primary);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Outfit', sans-serif; 
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.65;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        /* ======== HEADER/NAVBAR STYLES (from placement_website.html) ======== */
+        .navbar { position: fixed; top: 0; width: 100%; background-color: var(--bg-navbar); backdrop-filter: blur(10px); border-bottom: 1px solid var(--border-primary); z-index: 1000; padding: 1rem 0; transition: background-color 0.3s ease, border-bottom-color 0.3s ease; }
+        .nav-container { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; padding: 0 2rem; }
+        .logo { font-size: 2.2rem; font-weight: 800; color: var(--text-logo); text-decoration: none; transition: color 0.3s ease; font-family: 'Orbitron', sans-serif; }
+        .nav-links { display: flex; list-style: none; gap: 2rem; }
+        .nav-links a { color: var(--text-nav-link); text-decoration: none; font-weight: 500; transition: color 0.3s ease; position: relative; padding-bottom: 5px; display: inline-flex; align-items: center; gap: 0.5em; }
+        .nav-links a:hover { color: var(--text-nav-link-hover); }
+        .nav-links a::after { content: ''; position: absolute; width: 0; height: 2px; bottom: 0; left: 50%; transform: translateX(-50%); background: linear-gradient(90deg, var(--gradient-highlight-start), var(--gradient-highlight-end)); transition: width 0.3s ease; }
+        .nav-links a:hover::after { width: 100%; }
+        .nav-right-controls { display: flex; align-items: center; gap: 1rem; }
+        .auth-buttons { display: flex; gap: 1rem; }
+        .btn { padding: 0.6rem 1.3rem; border: none; border-radius: 8px; font-weight: 600; text-decoration: none; transition: all 0.3s ease; cursor: pointer; font-size: 0.9rem; }
+        .btn-login { background: transparent; color: var(--text-primary); border: 1.5px solid var(--border-secondary); }
+        .btn-login:hover { background: var(--accent-primary-hover); color: var(--text-on-accent); border-color: var(--accent-primary-hover); }
+        .btn-signup { background-color: var(--accent-primary); color: var(--text-on-accent); }
+        .btn-signup:hover { background-color: var(--accent-primary-hover); transform: translateY(-2px); }
+        .theme-toggle-btn { background: transparent; color: var(--text-theme-toggle); border: 1.5px solid var(--border-theme-toggle); padding: 0.5rem; width: auto; height: auto; border-radius: 8px; cursor: pointer; font-size: 1.1rem; transition: all 0.3s ease; display: grid; place-items: center; }
+        .theme-toggle-btn:hover { background: var(--bg-theme-toggle-hover); border-color: var(--border-hover); }
+
+        .user-profile { display: flex; align-items: center; gap: 1rem; position: relative; }
+        .profile-info { display: flex; align-items: center; gap: 0.8rem; }
+        .username { color: var(--text-primary); font-weight: 500; font-size: 0.95rem; }
+        .btn-profile { background: transparent; border: none; color: var(--text-primary); font-size: 1.5rem; cursor: pointer; padding: 0.3rem; border-radius: 50%; transition: all 0.3s ease; display: flex; align-items: center; justify-content: center; }
+        .btn-profile:hover { color: var(--accent-primary); transform: scale(1.1); }
+        .profile-menu { position: absolute; top: 120%; right: 0; background: var(--bg-card); border: 1px solid var(--border-secondary); border-radius: 8px; padding: 0.5rem; min-width: 180px; box-shadow: var(--shadow-card); display: none; z-index: 1000; }
+        .profile-menu.active { display: block; animation: fadeIn 0.2s ease-out; }
+        .profile-menu a { display: flex; align-items: center; gap: 0.8rem; padding: 0.8rem 1rem; color: var(--text-primary); text-decoration: none; font-size: 0.9rem; border-radius: 6px; transition: all 0.2s ease; }
+        .profile-menu a:hover { background: var(--bg-card-hover); color: var(--accent-primary); }
+        .profile-menu i { font-size: 1rem; width: 20px; text-align: center; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        /* Styles from previous response for profile command center, stats grid, details section */
+        /* ... (keep these identical, they are not changing) ... */
+        .main-content-profile { padding-top: 8rem; padding-bottom: 3rem;} /* Adjusted padding-top for fixed navbar */
+        .container { max-width: 1000px; margin: 0 auto; padding: 0 1rem; } 
+        .card-base { background-color: var(--bg-card); border: 1px solid var(--border-primary); border-radius: 16px;  box-shadow: var(--shadow-card); transition: transform 0.3s ease, box-shadow 0.3s ease; }
+        .card-base:hover { transform: translateY(-6px) scale(1.01); box-shadow: var(--shadow-card-hover); }
+        .profile-command-center { padding: 2rem 1.5rem; margin-bottom: 2.5rem; display: flex; flex-direction: column; align-items: center; gap: 1.25rem; text-align: center; position: relative; overflow: hidden; }
+        .profile-command-center::before {  content: ''; position: absolute; top:0; left:0; width:100%; height:100%; background-image: radial-gradient(circle at 20% 20%, rgba(var(--accent-secondary-rgb),0.08) 0%, transparent 60%), radial-gradient(circle at 80% 70%, rgba(var(--accent-tertiary-rgb),0.08) 0%, transparent 60%); opacity: 0.8; z-index: 0; animation: subtleBgFlow 30s infinite alternate; }
+        @keyframes subtleBgFlow { 0% { background-position: 0% 0%, 100% 100%; } 100% { background-position: 20% 20%, 80% 80%; } }
+        .profile-avatar { width: 150px; height: 150px; border-radius: 50%; background: var(--gradient-profile-avatar); display: grid; place-items: center; font-size: 4.5rem; color: white; font-weight: 700; font-family: 'Orbitron', sans-serif; border: 5px solid var(--bg-primary); box-shadow: 0 0 0 3px var(--accent-secondary), 0 0 30px rgba(var(--accent-secondary-rgb), 0.4), var(--shadow-card); position: relative; z-index: 1; transition: transform 0.3s ease, box-shadow 0.3s ease; }
+        .profile-avatar:hover { transform: scale(1.07); }
+        .user-identity h1 { font-family: 'Orbitron', sans-serif; font-size: 2.2rem; font-weight: 700; color: var(--text-headings); margin-bottom: 0.35rem; letter-spacing: 0.5px; }
+        .user-identity .department-tag { display: inline-block; background-color: transparent; color: var(--accent-secondary); padding: 0.3rem 1rem; border-radius: 20px; font-size: 0.8rem; font-weight: 600; border: 1.5px solid var(--accent-secondary); margin-bottom: 0.75rem; }
+        .user-identity .user-email { color: var(--text-secondary); font-size: 0.95rem;}
+        .edit-profile-fab {  background: var(--accent-primary); color: white; border: none; width: 48px; height: 48px; border-radius: 50%; font-size: 1.1rem; box-shadow: 0 4px 12px rgba(var(--accent-primary-rgb), 0.3); cursor: pointer; transition: all 0.3s ease; display: grid; place-items: center; margin-top: 1rem; }
+        .edit-profile-fab:hover { background: var(--accent-primary-hover); transform: translateY(-2px) scale(1.08) rotate(-10deg); }
+        .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.25rem; margin-bottom: 2.5rem; padding: 1.5rem; background: var(--bg-secondary); border-radius: 16px; border: 1px solid var(--border-primary); box-shadow: var(--shadow-card); }
+        .stat-pod { text-align: center; padding: 1rem 0.5rem; }
+        .stat-pod .stat-icon { font-size: 1.8rem; margin-bottom: 0.6rem; height: 32px; line-height: 32px; display: block; opacity: 0.9;}
+        .stat-pod.overall-progress .stat-icon { color: var(--icon-overall-progress); }
+        .stat-pod.topics-mastered .stat-icon { color: var(--icon-topics-mastered); }
+        .stat-pod.assessments-taken .stat-icon { color: var(--icon-assessments-taken); }
+        .stat-pod.average-score .stat-icon { color: var(--icon-average-score); }
+        .stat-pod .stat-value { font-family: 'Orbitron', sans-serif; font-size: 2.1rem; font-weight: 500; color: var(--text-headings); line-height: 1.1; margin-bottom: 0.25rem; }
+        .stat-pod .stat-label { color: var(--text-secondary); font-size: 0.75rem; font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px;}
+        .details-section-container { padding: 2rem; }
+        .details-section { margin-bottom: 2.5rem; }
+        .details-section:last-child { margin-bottom: 0; }
+        .details-section h2 { font-size: 1.3rem; font-weight: 600; margin-bottom: 1.25rem; color: var(--text-headings); padding-bottom: 0.6rem; border-bottom: 1px solid; border-image-source: var(--gradient-heading-border); border-image-slice: 1; display: flex; align-items: center; gap: 0.6rem; }
+        .details-section h2 i { color: var(--accent-secondary); font-size: 1em;} 
+        .details-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 1.25rem; }
+        .detail-item { background: var(--bg-card-alt); border-left: 3px solid var(--border-secondary); border-radius: 6px; padding: 0.8rem 1rem; transition: background-color 0.2s ease, border-left-color 0.2s ease; }
+        .detail-item:hover { background-color: var(--bg-secondary); border-left-color: var(--accent-secondary); }
+        .detail-label { color: var(--text-muted); font-size: 0.7rem; margin-bottom: 0.25rem; text-transform: uppercase; letter-spacing: 0.6px; }
+        .detail-value { color: var(--text-primary); font-size: 0.95rem; font-weight: 500; }
+
+        /* ======== CALENDAR STYLES REMOVED ======== */
+
+        /* Media Queries for general layout */
+        @media (max-width: 768px) {
+            .nav-links { display: none; } /* Hide nav links on mobile */
+            .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 1rem; padding: 1rem; }
+            .details-section-container { padding: 1.5rem; }
+            .details-section h2 { font-size: 1.3rem; }
+        }
+        @media (max-width: 480px) {
+            .stats-grid { grid-template-columns: 1fr; }
+             .container { padding: 0 0.5rem; }
+             .profile-command-center { padding: 1.5rem 0.75rem; }
+        }
+
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="placement_website.html" class="logo">PlacePrep</a>
+            <ul class="nav-links">
+                <li><a href="placement_website.html#home"><i class="fas fa-home"></i> Home</a></li>
+                <li><a href="placement_website.html#features"><i class="fas fa-star"></i> Features</a></li>
+                <li><a href="placement_website.html#departments"><i class="fas fa-building"></i> Departments</a></li>
+                <li><a href="mocktest.html"><i class="fas fa-file-alt"></i> Mock Tests</a></li>
+                <li><a href="interview.html"><i class="fas fa-microphone-alt"></i> Interview Prep</a></li>
+            </ul>
+            <div class="nav-right-controls">
+                <div class="auth-buttons" id="auth-buttons" style="display: none;">
+                    <a href="#" class="btn btn-login" onclick="showLogin()">Login</a>
+                    <a href="#" class="btn btn-signup" onclick="showSignup()">Sign Up</a>
+                </div>
+                <div class="user-profile" id="user-profile" style="display: none;">
+                    <div class="profile-info">
+                        <span class="username" id="username">User</span>
+                        <button class="btn-profile" onclick="showProfileMenu()">
+                            <i class="fas fa-user-circle"></i>
+                        </button>
+                        <div class="profile-menu" id="profile-menu">
+                            <a href="profile.html"><i class="fas fa-user"></i> View Profile</a>
+                            <a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                        </div>
+                    </div>
+                </div>
+                 <button id="theme-toggle-btn" class="theme-toggle-btn" aria-label="Toggle theme">
+                    <i class="fas fa-moon"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="main-content-profile">
+        <div class="container">
+            <div class="profile-command-center card-base" data-aos="fade-down" data-aos-duration="700">
+                <div class="profile-avatar" id="profileAvatar"><i class="fas fa-user-astronaut"></i></div>
+                <div class="user-identity">
+                    <h1 id="profileUserName">User FullName</h1>
+                    <div class="department-tag" id="profileUserDepartment">Department Field</div>
+                    <p class="user-email" id="profileUserEmail">user.email@example.com</p>
+                </div>
+                 <button class="edit-profile-fab" onclick="editProfile()" aria-label="Edit Profile" title="Edit Profile"><i class="fas fa-user-edit"></i></button>
+            </div>
+
+            <div class="stats-grid" data-aos="fade-up" data-aos-delay="100">
+                <div class="stat-pod card-base overall-progress"><div class="stat-icon"><i class="fas fa-crosshairs"></i></div><div class="stat-value" id="profileStrengthStat">0%</div><div class="stat-label">Profile Strength</div></div>
+                <div class="stat-pod card-base topics-mastered"><div class="stat-icon"><i class="fas fa-book-open-reader"></i></div><div class="stat-value" id="modulesCompletedStat">0</div><div class="stat-label">Modules Covered</div></div>
+                <div class="stat-pod card-base assessments-taken"><div class="stat-icon"><i class="fas fa-user-pen"></i></div><div class="stat-value" id="testsTakenStat">0</div><div class="stat-label">Tests Completed</div></div>
+                <div class="stat-pod card-base average-score"><div class="stat-icon"><i class="fas fa-bullseye-pointer"></i></div><div class="stat-value" id="avgScoreStat">N/A</div><div class="stat-label">Average Test Score</div></div>
+            </div>
+
+            <div class="details-section-container card-base" data-aos="fade-up" data-aos-delay="200">
+                <div class="details-section">
+                    <h2><i class="fas fa-address-card"></i> Identity Log</h2>
+                    <div class="details-grid">
+                        <div class="detail-item"><div class="detail-label">First Name</div><div class="detail-value" id="infoFirstName">Loading...</div></div>
+                        <div class="detail-item"><div class="detail-label">Last Name</div><div class="detail-value" id="infoLastName">Loading...</div></div>
+                        <div class="detail-item"><div class="detail-label">Registered Email</div><div class="detail-value" id="infoEmail">Loading...</div></div>
+                        <div class="detail-item"><div class="detail-label">Primary Department</div><div class="detail-value" id="infoDepartment">Loading...</div></div>
+                    </div>
+                </div>
+                <div class="details-section">
+                    <h2><i class="fas fa-chart-line"></i> Performance Metrics</h2>
+                    <div class="details-grid">
+                        <div class="detail-item"><div class="detail-label">Modules Attempted</div><div class="detail-value" id="infoTopicsCovered">0/0</div></div>
+                        <div class="detail-item"><div class="detail-label">Average Test Score</div><div class="detail-value" id="infoTestPerformance">N/A</div></div>
+                        <div class="detail-item"><div class="detail-label">Interviews Completed</div><div class="detail-value" id="infoInterviewsDone">0</div></div>
+                        <div class="detail-item"><div class="detail-label">Last Activity</div><div class="detail-value" id="infoLastActive">Loading...</div></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script>
+    AOS.init({ duration: 700, once: true, offset: 30 });
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const themeToggleButton = document.getElementById('theme-toggle-btn');
+        const htmlElement = document.documentElement;
+        let currentIcon = themeToggleButton ? themeToggleButton.querySelector('i') : null;
+
+        function setTheme(theme) {
+            const isLight = theme === 'light';
+            htmlElement.classList.toggle('light-mode', isLight);
+            if (currentIcon) currentIcon.className = isLight ? 'fas fa-moon' : 'fas fa-sun';
+            localStorage.setItem('theme', theme);
+        }
+        const savedTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+        setTheme(savedTheme);
+         if (themeToggleButton) {
+            themeToggleButton.addEventListener('click', () => {
+                setTheme(htmlElement.classList.contains('light-mode') ? 'dark' : 'light');
+            });
+        }
+        
+        window.addEventListener('scroll', () => {
+            const navbar = document.querySelector('.navbar');
+            if (navbar && window.scrollY > 20) {
+                navbar.style.backgroundColor = 'var(--bg-navbar-scrolled)';
+            } else if (navbar) {
+                navbar.style.backgroundColor = 'var(--bg-navbar)';
+            }
+        });
+
+        checkLoginStatus(); 
+
+        // --- Load User Data & Progress ---
+        const userData = JSON.parse(localStorage.getItem('user')) || {};
+        const userId = localStorage.getItem('userId');
+
+        // Populate basic user info immediately
+        if (document.getElementById('profileAvatar')) document.getElementById('profileAvatar').innerHTML = (userData.firstName || 'U').charAt(0).toUpperCase();
+        setText('profileUserName', `${userData.firstName || 'User'} ${userData.lastName || ''}`.trim());
+        setText('profileUserDepartment', userData.department || 'Aspiring Professional');
+        setText('profileUserEmail', userData.email || 'N/A');
+        setText('infoFirstName', userData.firstName || 'Not Set');
+        setText('infoLastName', userData.lastName || 'Not Set');
+        setText('infoEmail', userData.email || 'Not Set');
+        setText('infoDepartment', userData.department || 'Not Set');
+        const lastActive = localStorage.getItem('lastLoginDate') || new Date().toISOString();
+        setText('infoLastActive', formatLastActive(lastActive));
+        localStorage.setItem('lastLoginDate', new Date().toISOString());
+
+        // Fetch and populate dynamic progress stats
+        if (userId) {
+            fetchProgressData(userId);
+        } else {
+            console.error("No userId found in localStorage. Cannot fetch progress.");
+            // Set stats to default values if no user ID
+            setText('profileStrengthStat', '0%');
+            setText('modulesCompletedStat', '0');
+            setText('testsTakenStat', '0');
+            setText('avgScoreStat', 'N/A');
+            setText('infoTopicsCovered', '0 / 10');
+            setText('infoTestPerformance', 'N/A');
+            setText('infoInterviewsDone', '0 Sessions');
+        }
+    });
+
+    async function fetchProgressData(userId) {
+        try {
+            const response = await fetch(`/api/progress/${userId}`);
+            if (!response.ok) {
+                throw new Error(`Failed to fetch progress: ${response.statusText}`);
+            }
+            const progress = await response.json();
+
+            // Populate the stats grid
+            setText('profileStrengthStat', `${progress.profileStrength || 0}%`);
+            setText('modulesCompletedStat', progress.modulesAttempted || 0);
+            setText('testsTakenStat', progress.testsCompleted || 0);
+            const avgScore = progress.averageScore;
+            setText('avgScoreStat', avgScore ? `${avgScore.toFixed(1)}%` : 'N/A');
+
+            // Populate the performance metrics section
+            setText('infoTopicsCovered', `${progress.modulesAttempted || 0} / ${progress.totalModules || 10}`);
+            setText('infoTestPerformance', avgScore ? `${avgScore.toFixed(1)}% Avg.` : 'N/A');
+            setText('infoInterviewsDone', `${progress.interviewsCompleted || 0} Sessions`);
+
+        } catch (error) {
+            console.error("Error in fetchProgressData:", error);
+            // You might want to display a user-friendly error message here
+        }
+    }
+
+    function setText(id, textContent) {
+        const element = document.getElementById(id);
+        if (element) element.textContent = textContent;
+    }
+
+    function calculateOverallProgress(testScorePercent, topicsCompletePercent, interviewScorePercent) {
+        testScorePercent = Math.max(0, Math.min(100, Number(testScorePercent) || 0));
+        topicsCompletePercent = Math.max(0, Math.min(100, Number(topicsCompletePercent) || 0));
+        interviewScorePercent = Math.max(0, Math.min(100, Number(interviewScorePercent) || 0));
+        const testWeight = 0.35, topicsWeight = 0.45, interviewWeight = 0.20; 
+        return (testScorePercent * testWeight) + (topicsCompletePercent * topicsWeight) + (interviewScorePercent * interviewWeight);
+    }
+
+    function formatLastActive(isoString) {
+        const date = new Date(isoString);
+        if (isNaN(date.getTime())) return 'N/A';
+        const now = new Date();
+        const diffTime = Math.abs(now - date);
+        const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+        if (diffDays === 0) return 'Today';
+        if (diffDays === 1) return 'Yesterday';
+        if (diffDays < 7) return `${diffDays} days ago`;
+        return date.toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' });
+    }
+
+    window.editProfile = function() {
+        const currentUserData = JSON.parse(localStorage.getItem('user')) || {};
+        const newFirstName = prompt('Update First Name:', currentUserData.firstName || '');
+        const newLastName = prompt('Update Last Name:', currentUserData.lastName || '');
+        const newDepartment = prompt('Update Department:', currentUserData.department || '');
+
+        const updatedUserData = { ...currentUserData };
+        let changed = false;
+
+        if (newFirstName !== null && newFirstName.trim() && newFirstName !== currentUserData.firstName) {
+            updatedUserData.firstName = newFirstName;
+            changed = true;
+        }
+        if (newLastName !== null && newLastName.trim() && newLastName !== currentUserData.lastName) {
+            updatedUserData.lastName = newLastName;
+            changed = true;
+        }
+        if (newDepartment !== null && newDepartment.trim() && newDepartment !== currentUserData.department) {
+            updatedUserData.department = newDepartment;
+            changed = true;
+        }
+
+        if (changed) {
+        localStorage.setItem('user', JSON.stringify(updatedUserData));
+        location.reload(); 
+    }
+    }
+
+    // --- NAVBAR/AUTH FUNCTIONS (from placement_website.html) ---
+    function checkLoginStatus() {
+        const isLoggedIn = localStorage.getItem('isLoggedIn');
+        const firstName = localStorage.getItem('firstName');
+        
+        const authButtons = document.getElementById('auth-buttons');
+        const userProfile = document.getElementById('user-profile');
+        const usernameElement = document.getElementById('username');
+        
+        if (isLoggedIn === 'true' && firstName) {
+            if (authButtons) authButtons.style.display = 'none';
+            if (userProfile) userProfile.style.display = 'flex';
+            if (usernameElement) usernameElement.textContent = firstName;
+        } else {
+            if (authButtons) authButtons.style.display = 'flex';
+            if (userProfile) userProfile.style.display = 'none';
+        }
+    }
+
+    function showProfileMenu() {
+        const profileMenu = document.getElementById('profile-menu');
+        if (!profileMenu) return;
+        profileMenu.classList.toggle('active');
+        
+        // Close menu when clicking outside
+        setTimeout(() => { // Use timeout to ensure the event listener is added after the current click event is processed
+            if (profileMenu.classList.contains('active')) {
+                document.addEventListener('click', closeMenuOnClickOutside);
+            }
+        }, 0);
+    }
+
+    function closeMenuOnClickOutside(e) {
+        const profileMenu = document.getElementById('profile-menu');
+        const userProfile = document.querySelector('.user-profile');
+        if (profileMenu && !userProfile.contains(e.target)) {
+            profileMenu.classList.remove('active');
+            document.removeEventListener('click', closeMenuOnClickOutside);
+        }
+    }
+
+    function logout() {
+        localStorage.removeItem('isLoggedIn');
+        localStorage.removeItem('firstName');
+        localStorage.removeItem('user');
+        window.location.href = 'login.html';
+    }
+
+    function showLogin() { window.location.href = 'login.html'; }
+    function showSignup() { window.location.href = 'signup.html'; }
+
+</script>
+</body>
+</html>

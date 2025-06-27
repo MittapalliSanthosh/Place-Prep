@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSE Department - PlacePrep</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        /* ======== SHARED THEME VARIABLES (Template from ECE Page) ======== */
+        :root {
+            --bg-primary: #000000;
+            --bg-secondary: #050505;
+            --bg-navbar: rgba(10, 10, 10, 0.8);
+            --bg-navbar-scrolled: rgba(0, 0, 0, 0.9);
+            --bg-card: #101010;
+            --bg-card-hover: #151515;
+            --bg-card-alt: #0D0D0D;
+            --bg-footer: #0A0A0A; 
+            --bg-theme-toggle-hover: #222222;
+            --bg-tab-active: var(--accent-primary); 
+            --bg-tab-inactive: #181818;
+            --bg-modal: rgba(16, 16, 16, 0.95); 
+
+            --text-primary: #E0E0E0;
+            --text-secondary: #B0B0B0;
+            --text-muted: #A0A0A0;
+            --text-headings: #FFFFFF;
+            --text-logo: #FFFFFF; 
+            --text-nav-link: #A0A0A0;
+            --text-nav-link-hover: #FFFFFF;
+            --text-btn: #E0E0E0;
+            --text-btn-accent: #FFFFFF;
+            --text-on-accent: #FFFFFF;
+            --text-theme-toggle: #E0E0E0;
+            --text-accent-gradient-end: #5A78F6; 
+
+            --border-primary: #222222;
+            --border-secondary: #282828;
+            --border-hover: #444444;
+            --border-btn: #444444;
+            --border-btn-accent: var(--accent-primary);
+            --border-theme-toggle: #444444;
+
+            /* CSE THEME ACCENTS */
+            --accent-primary: #F97316; 
+            --accent-primary-hover: #EA580C;
+            --accent-secondary: #3B82F6; /* Blue for CSE */
+            --accent-secondary-hover: #2563EB;
+            --accent-progress: var(--accent-primary);
+
+            --gradient-highlight-start: #A755F7; 
+            --gradient-highlight-end: var(--accent-secondary); 
+
+            --icon-default: #A0A0A0;
+            --icon-accent: var(--accent-secondary); 
+            
+            --shadow-card: 0 6px 12px rgba(0,0,0,0.25); 
+            --shadow-card-hover: 0 10px 20px rgba(0,0,0,0.3);
+        }
+
+        html.light-mode {
+            --bg-primary: #FFFFFF;
+            --bg-secondary: #F8F9FA;
+            --bg-navbar: rgba(255, 255, 255, 0.85);
+            --bg-navbar-scrolled: rgba(248, 249, 250, 0.95);
+            --bg-card: #FFFFFF;
+            --bg-card-hover: #F1F3F5;
+            --bg-card-alt: #F8F9FA;
+            --bg-footer: #F1F3F5;
+            --bg-theme-toggle-hover: #E9ECEF;
+            --bg-tab-active: var(--accent-primary);
+            --bg-tab-inactive: #FFFFFF;
+            --bg-modal: rgba(248, 249, 250, 0.98); 
+
+            --text-primary: #212529;
+            --text-secondary: #495057;
+            --text-muted: #6C757D;
+            --text-headings: #212529;
+            --text-logo: var(--accent-primary); 
+            --text-nav-link: #495057;
+            --text-nav-link-hover: var(--accent-primary);
+            --text-btn: var(--accent-primary);
+            --text-btn-accent: #FFFFFF;
+            --text-on-accent: #FFFFFF;
+            --text-theme-toggle: #495057;
+            --text-accent-gradient-end: #4A62D6;
+
+            --border-primary: #DEE2E6;
+            --border-secondary: #CED4DA;
+            --border-hover: #ADB5BD;
+            --border-btn: var(--accent-primary);
+            --border-btn-accent: var(--accent-primary);
+            --border-theme-toggle: #CED4DA;
+
+            /* CSE THEME ACCENTS */
+            --accent-primary: #F97316;
+            --accent-primary-hover: #EA580C;
+            --accent-secondary: #3B82F6; 
+            --accent-secondary-hover: #2563EB;
+            --accent-progress: var(--accent-primary);
+
+            --gradient-highlight-start: #7B3FE3;
+            --gradient-highlight-end: var(--text-accent-gradient-end);   
+
+            --icon-default: #6C757D;
+            --icon-accent: var(--accent-secondary);
+
+            --shadow-card: 0 4px 12px rgba(0,0,0,0.07);
+            --shadow-card-hover: 0 8px 20px rgba(0,0,0,0.1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Outfit', sans-serif; 
+            background: var(--bg-primary);
+            min-height: 100vh;
+            color: var(--text-primary);
+            line-height: 1.65;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .navbar {
+            position: fixed; top: 0; width: 100%;
+            background: var(--bg-navbar);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border-primary);
+            z-index: 1000; padding: 1rem 0;
+            transition: background-color 0.3s ease, border-bottom-color 0.3s ease;
+        }
+        html[data-scrolled="true"] .navbar { background: var(--bg-navbar-scrolled); }
+        
+        .nav-container {
+            max-width: 1200px; margin: 0 auto; display: flex;
+            justify-content: space-between; align-items: center; padding: 0 2rem;
+        }
+        .logo { font-size: 2.2rem; font-weight: 800; color: var(--text-logo); text-decoration: none; transition: color 0.3s ease; }
+        .nav-links { display: flex; list-style: none; gap: 2.5rem; }
+        .nav-links a {
+            color: var(--text-nav-link); text-decoration: none; font-weight: 500;
+            transition: color 0.3s ease; position: relative; padding-bottom: 5px;
+        }
+        .nav-links a:hover, .nav-links a.active { color: var(--text-nav-link-hover); }
+        .nav-links a.active::after {
+            content: ''; position: absolute; width: 100%; height: 2px; bottom: 0;
+            left: 50%; transform: translateX(-50%);
+            background: linear-gradient(90deg, var(--gradient-highlight-start), var(--gradient-highlight-end));
+        }
+         .nav-links a:not(.active):hover::after {
+            content: ''; position: absolute; width: 0; height: 2px; bottom: 0;
+            left: 50%; transform: translateX(-50%);
+            background: linear-gradient(90deg, var(--gradient-highlight-start), var(--gradient-highlight-end));
+            transition: width 0.3s ease; width: 100%;
+        }
+        .nav-right-controls { display: flex; align-items: center; gap: 1rem; }
+        .theme-toggle-btn {
+            background: transparent; color: var(--text-theme-toggle); border: 1.5px solid var(--border-theme-toggle);
+            padding: 0.5rem 0.8rem; border-radius: 8px; cursor: pointer; font-size: 1rem; transition: all 0.3s ease;
+        }
+        .theme-toggle-btn:hover { background: var(--bg-theme-toggle-hover); border-color: var(--border-hover); }
+
+        .main-content { margin-top: 80px; padding: 2.5rem 0; } 
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 2rem; }
+
+        .dept-header {
+            text-align: center; margin-bottom: 3rem; padding: 2.5rem 1rem;
+            background: var(--bg-secondary); border-radius: 12px; border: 1px solid var(--border-primary);
+            box-shadow: var(--shadow-card);
+        }
+        .dept-header h1 { font-size: 2.5rem; margin-bottom: 1rem; color: var(--text-headings); }
+        .dept-header h1 i { margin-right: 0.5rem; color: var(--icon-accent); }
+        .dept-header p { font-size: 1.1rem; color: var(--text-secondary); }
+
+        .card-base {
+            background: var(--bg-card); border: 1px solid var(--border-secondary);
+            border-radius: 12px; padding: 1.5rem; box-shadow: var(--shadow-card);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .card-base:hover { transform: translateY(-4px); box-shadow: var(--shadow-card-hover); }
+        
+        .section-heading {
+            font-size: 1.8rem; color: var(--text-headings); margin-bottom: 1.5rem;
+            text-align: center; padding-bottom: 1rem; border-bottom: 1px solid var(--border-primary);
+        }
+
+        .progress-section { margin-bottom: 2.5rem; padding: 2rem; background-color: var(--bg-secondary); border-radius: 12px; border: 1px solid var(--border-primary);}
+        .progress-header { text-align: center; margin-bottom: 2rem; }
+        .progress-header h2 { font-size: 1.6rem; color: var(--text-headings); margin-bottom: 0.4rem; }
+        .progress-header p { color: var(--text-secondary); font-size: 1rem; }
+        .progress-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; }
+        .progress-item { text-align: center; background: var(--bg-card-alt); padding:1.5rem; border-radius: 8px; border:1px solid var(--border-primary); }
+        .progress-circle {
+            width: 90px; height: 90px; border-radius: 50%; margin: 0 auto 1rem; position: relative;
+            display: grid; place-items: center;
+            background: conic-gradient(var(--accent-progress) var(--progress, 0deg), var(--border-primary) var(--progress, 0deg));
+        }
+        .progress-circle::before { content: ''; position: absolute; width: 70px; height: 70px; background: var(--bg-card-alt); border-radius: 50%; }
+        .progress-value { font-size: 1.4rem; font-weight: 600; color: var(--text-headings); z-index: 1; }
+        .progress-item h3 { font-size: 1.05rem; color: var(--text-primary); margin-bottom: 0.3rem; }
+        .progress-item p { color: var(--text-muted); font-size: 0.85rem; }
+
+        .categories { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.5rem; margin-bottom: 3rem; }
+        .category-card {
+            text-align: center; cursor: pointer; background: var(--bg-card);
+            border: 1px solid var(--border-secondary); border-radius: 12px; padding: 2rem; box-shadow: var(--shadow-card);
+        }
+        .category-card:hover { transform: translateY(-6px); box-shadow: var(--shadow-card-hover); border-color: var(--icon-accent); }
+        .category-icon { font-size: 2.5rem; margin-bottom: 1rem; color: var(--icon-accent); }
+        .category-card h3 { font-size: 1.4rem; margin-bottom: 0.75rem; color: var(--text-headings); }
+        .category-card > p { color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 1rem; }
+        .category-stats { display: flex; justify-content: space-around; margin-top: 1rem; font-size: 0.85rem; border-top: 1px solid var(--border-primary); padding-top: 1rem;}
+        .stat { text-align: center; color: var(--text-muted);}
+        .stat-number { font-weight: 600; color: var(--text-primary); display:block; font-size: 1.1rem; }
+
+        .content-section { 
+            display: none; padding: 2rem; background-color: var(--bg-secondary); 
+            border: 1px solid var(--border-primary); border-radius: 12px; margin-bottom: 2.5rem; box-shadow: var(--shadow-card);
+        }
+        .content-section.active { display: block; animation: fadeInUp 0.4s ease-out; }
+        .section-header { margin-bottom: 1.5rem; }
+        .section-title { font-size: 1.8rem; color: var(--text-headings); text-align: center; margin-bottom: 1.5rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border-primary);}
+
+        .topics-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 1.5rem;
+        }
+        .topic-item {
+            background: var(--bg-card); border: 1px solid var(--border-secondary); border-radius: 12px;
+            padding: 1.5rem; display: flex; flex-direction: column;
+            transition: all 0.3s ease;
+        }
+        .topic-item:hover { transform: translateY(-4px); box-shadow: var(--shadow-card-hover); border-color: var(--accent-secondary); }
+        .topic-header { flex-grow: 1; }
+        .topic-title { font-size: 1.15rem; font-weight: 600; color: var(--text-headings); margin-bottom: 0.5rem; }
+        .topic-notes-preview { font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 1rem; }
+        .topic-actions { display: flex; gap: 0.75rem; margin-top: auto; padding-top: 1rem; border-top: 1px solid var(--border-primary); }
+        .btn {
+            flex: 1; text-align: center; background: transparent; border: 1.5px solid var(--border-btn);
+            color: var(--text-btn); padding: 0.6rem 1rem; border-radius: 8px; cursor: pointer;
+            font-size: 0.85rem; font-weight: 500; transition: all 0.3s ease; text-decoration: none;
+        }
+        .btn:hover { border-color: var(--border-hover); background: var(--bg-card-hover); }
+        .btn-primary { background: var(--accent-secondary); border-color: var(--accent-secondary); color: white; }
+        .btn-primary:hover { background: var(--accent-secondary-hover); border-color: var(--accent-secondary-hover); }
+        .btn-primary:disabled { background: var(--border-secondary); border-color: var(--border-secondary); color: var(--text-muted); cursor: not-allowed; }
+        .btn-primary.completed { background: #2ecc71; border-color: #27ae60; color: white; }
+        
+        .topic-notes-full { display: none; margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--border-primary); animation: fadeInUp 0.3s; }
+        .topic-notes-full.active { display: block; }
+        .topic-notes-full h5 { color: var(--text-headings); margin-bottom: 0.5rem; }
+        .topic-notes-full ul { list-style-position: inside; padding-left: 0.5rem; }
+        
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* AI Chatbot Styles */
+        .ai-chat-btn {
+            position: fixed; bottom: 2rem; right: 2rem; width: 60px; height: 60px;
+            border-radius: 50%; background: linear-gradient(135deg, var(--gradient-highlight-start), var(--gradient-highlight-end));
+            border: none; color: white; font-size: 1.5rem; cursor: pointer;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3); transition: all 0.3s ease;
+            z-index: 1000; display: flex; align-items: center; justify-content: center;
+        }
+        .ai-chat-btn:hover { transform: scale(1.1); box-shadow: 0 12px 35px rgba(0, 0, 0, 0.4); }
+        .chat-modal {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.8); backdrop-filter: blur(5px);
+            z-index: 2000; display: none; align-items: center; justify-content: center; padding: 1rem;
+        }
+        .chat-modal.active { display: flex; }
+        .chat-container {
+            background: var(--bg-card); border: 1px solid var(--border-secondary); border-radius: 16px;
+            width: 100%; max-width: 500px; max-height: 80vh; display: flex;
+            flex-direction: column; box-shadow: var(--shadow-card-hover);
+        }
+        .chat-header {
+            padding: 1.25rem 1.5rem; border-bottom: 1px solid var(--border-primary); display: flex;
+            justify-content: space-between; align-items: center;
+        }
+        .chat-header h3 { color: var(--text-headings); font-size: 1.1rem; font-weight: 600; margin: 0; }
+        .chat-close {
+            background: none; border: none; color: var(--text-muted); font-size: 1.5rem; cursor: pointer;
+            padding: 0.5rem; line-height: 0; transition: all 0.3s ease;
+        }
+        .chat-close:hover { color: var(--text-primary); }
+        .chat-messages { flex: 1; padding: 1rem; overflow-y: auto; max-height: 400px; }
+        .message { margin-bottom: 1rem; max-width: 90%; word-wrap: break-word; line-height: 1.5; }
+        .message.user { margin-left: auto; }
+        .message.user p { background: var(--accent-primary); color: white; border-radius: 12px 12px 4px 12px; padding: 0.8rem 1rem; }
+        .message.bot { margin-right: auto; }
+        .message.bot { background: var(--bg-card-alt); color: var(--text-primary); border-radius: 12px 12px 12px 4px; padding: 0.8rem 1rem; border: 1px solid var(--border-primary); }
+        .message.bot h2, .message.bot h3, .message.bot h4 { margin-top: 1rem; margin-bottom: 0.5rem; color: var(--text-headings); }
+        .message.bot ul { padding-left: 1.2rem; margin-bottom: 0.5rem; }
+        .message.bot code { background: rgba(0,0,0,0.2); padding: 0.1rem 0.3rem; border-radius: 4px; font-size: 0.9em; }
+        html.light-mode .message.bot code { background: rgba(0,0,0,0.05); }
+        .message.bot.loading {
+            display: flex; align-items: center; gap: 0.5rem; background: transparent; border: none;
+        }
+        .loading-dots { display: flex; gap: 0.2rem; }
+        .loading-dots span {
+            width: 6px; height: 6px; border-radius: 50%; background: var(--text-muted);
+            animation: loading 1.4s infinite ease-in-out;
+        }
+        .loading-dots span:nth-child(1) { animation-delay: -0.32s; }
+        .loading-dots span:nth-child(2) { animation-delay: -0.16s; }
+        @keyframes loading { 0%, 80%, 100% { transform: scale(0); } 40% { transform: scale(1); } }
+        .chat-input-container { padding: 1rem; border-top: 1px solid var(--border-primary); display: flex; gap: 0.5rem; }
+        .chat-input {
+            flex: 1; padding: 0.8rem 1rem; border: 1px solid var(--border-primary); border-radius: 8px;
+            background: var(--bg-primary); color: var(--text-primary); font-family: inherit;
+            resize: none; min-height: 40px; max-height: 120px; transition: border-color 0.3s;
+        }
+        .chat-input:focus { outline: none; border-color: var(--accent-secondary); }
+        .chat-send {
+            padding: 0.8rem 1.2rem; background: var(--accent-secondary); color: white;
+            border: none; border-radius: 8px; cursor: pointer; font-weight: 500; transition: all 0.3s ease;
+        }
+        .chat-send:hover { background: var(--accent-secondary-hover); }
+        .chat-send:disabled { background: var(--border-secondary); cursor: not-allowed; }
+
+        @media (max-width: 768px) {
+            .nav-links { display: none; }
+            .container { padding: 0 1rem; }
+            .dept-header h1 { font-size: 2rem; }
+            .dept-header p { font-size: 1rem; }
+            .categories, .progress-stats { grid-template-columns: 1fr; }
+            .ai-chat-btn { bottom: 1rem; right: 1rem; width: 50px; height: 50px; font-size: 1.2rem; }
+            .chat-container { max-width: 95%; margin: 1rem; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="placement_website.html" class="logo">PlacePrep</a>
+            <ul class="nav-links">
+                <li><a href="placement_website.html">Home</a></li>
+                <li><a href="#" class="active">CSE Department</a></li>
+                <li><a href="#progress">Progress</a></li>
+                <li><a href="#topics">Topics</a></li>
+            </ul>
+            <div class="nav-right-controls">
+                <button id="theme-toggle-btn" class="theme-toggle-btn" aria-label="Toggle theme">
+                    <i class="fas fa-sun"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            <!-- Department Header -->
+            <header class="dept-header">
+                <h1><i class="fas fa-laptop-code"></i> Computer Science & Engineering</h1>
+                <p>Your hub for mastering core CSE concepts, algorithms, and system design for top placements.</p>
+            </header>
+
+            <!-- Progress Section -->
+            <section id="progress" class="progress-section">
+                <div class="progress-header">
+                    <h2>Your CSE Learning Dashboard</h2>
+                    <p>Track your overall progress across key Computer Science domains.</p>
+                </div>
+                <div class="progress-stats" id="progressStats">
+                    <!-- Progress items dynamically added by JS -->
+                </div>
+            </section>
+
+            <!-- Categories -->
+            <h2 id="topics" class="section-heading">Explore CSE Domains</h2>
+            <section class="categories" id="categories">
+                <!-- Category cards dynamically added by JS -->
+            </section>
+
+            <!-- Topics Content Section -->
+            <section id="content-section" class="content-section">
+                <header class="section-header">
+                    <h2 id="section-title" class="section-title"></h2>
+                </header>
+                <div id="topics-list" class="topics-list">
+                    <!-- Topics will be dynamically loaded here -->
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- AI Chatbot Button -->
+    <button class="ai-chat-btn" onclick="openChat()" aria-label="Open AI Assistant" title="Chat with AI Assistant">
+        <i class="fas fa-robot"></i>
+    </button>
+
+    <!-- AI Chatbot Modal -->
+    <div class="chat-modal" id="chatModal">
+        <div class="chat-container">
+            <div class="chat-header">
+                <h3><i class="fas fa-robot" style="margin-right: 0.5rem; color: var(--accent-secondary);"></i>CSE AI Assistant</h3>
+                <button class="chat-close" onclick="closeChat()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="chat-messages" id="chatMessages">
+                <div class="message bot">
+                    <p>Hello! I'm your CSE learning assistant. Ask me anything about Computer Science and AI!</p>
+                </div>
+            </div>
+            <div class="chat-input-container">
+                <textarea class="chat-input" id="chatInput" placeholder="Ask about 'Big O' or 'Neural Networks'..." rows="1"></textarea>
+                <button class="chat-send" onclick="sendMessage()" id="sendBtn">
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Data Object for CSE Topics
+        const cseTopicsData = {
+            'dsa': {
+                title: 'Data Structures & Algorithms', icon: 'fas fa-code-branch',
+                topics: [
+                    { id: 'dsa-arrays', name: 'Arrays and Strings', notes: '<p>Key Concepts: Time/Space Complexity, Two Pointers, Sliding Window.</p><h5>Topics:</h5><ul><li>Array manipulation</li><li>String searching (KMP)</li><li>Hashing for lookups</li></ul>' },
+                    { id: 'dsa-linkedlist', name: 'Linked Lists', notes: '<p>Types: Singly, Doubly, Circular. Operations: insertion, deletion, reversal.</p>' },
+                    { id: 'dsa-trees', name: 'Trees, Tries & Heaps', notes: '<p>Traversals, BSTs, AVL/Red-Black Trees, Priority Queues with Heaps, Tries for string searching.</p>' },
+                    { id: 'dsa-graphs', name: 'Graphs', notes: '<p>Representations: Adjacency Matrix/List. Algorithms: BFS, DFS, Dijkstra, Bellman-Ford, Topological Sort, MST.</p>' },
+                    { id: 'dsa-dp', name: 'Dynamic Programming', notes: '<p>Patterns: Optimal substructure & overlapping subproblems. Memoization vs Tabulation.</p>' },
+                    { id: 'dsa-recursion', name: 'Recursion & Backtracking', notes: '<p>Core concepts: Base cases, recursive step. Used for exploring solution spaces.</p>' },
+                ]
+            },
+            'system-design': {
+                title: 'System Design', icon: 'fas fa-cogs',
+                topics: [
+                    { id: 'sd-basics', name: 'Fundamentals', notes: '<p>Concepts: Scalability (Vertical/Horizontal), Availability, Fault Tolerance, CAP Theorem, Load Balancing.</p>' },
+                    { id: 'sd-databases', name: 'Databases & Caching', notes: '<p>SQL vs NoSQL, Sharding, Replication. Caching strategies like Write-through, Write-back.</p>' },
+                    { id: 'sd-api', name: 'API Design', notes: '<p>RESTful principles, GraphQL, API Gateway, Rate Limiting, Authentication (OAuth, JWT).</p>' },
+                    { id: 'sd-messaging', name: 'Messaging Queues', notes: '<p>Systems like Kafka, RabbitMQ. Decoupling services for asynchronous communication.</p>' },
+                ]
+            },
+            'core-cs': {
+                title: 'Core CS Subjects', icon: 'fas fa-server',
+                topics: [
+                    { id: 'core-os', name: 'Operating Systems', notes: '<p>Concepts: Processes, Threads, Scheduling, Memory Management (Paging, Segmentation), Deadlocks.</p>' },
+                    { id: 'core-dbms', name: 'DBMS & SQL', notes: "<p>Concepts: Relational Algebra, SQL Joins, Normalization (1NF-BCNF), Indexing, Transactions (ACID).</p>" },
+                    { id: 'core-cn', name: 'Computer Networks', notes: '<p>Models: OSI & TCP/IP. Protocols: HTTP, TCP, UDP, IP, DNS. Network Security basics.</p>' },
+                ]
+            },
+             'programming-langs': {
+                title: 'Languages & Paradigms', icon: 'fas fa-laptop-code',
+                topics: [
+                    { id: 'lang-oop', name: 'Object-Oriented Programming', notes: '<p>Pillars: Encapsulation, Abstraction, Inheritance, Polymorphism. Core to C++, Java.</p>' },
+                    { id: 'lang-cpp', name: 'C++ Essentials', notes: '<p>Features: Pointers, Memory Management, Standard Template Library (STL).</p>' },
+                    { id: 'lang-java', name: 'Java Essentials', notes: '<p>Features: JVM, Garbage Collection, Collections Framework, Concurrency.</p>' },
+                    { id: 'lang-python', name: 'Python Essentials', notes: '<p>Features: Dynamic typing, extensive libraries (NumPy, Pandas), Generators, Decorators.</p>' },
+                ]
+            }
+        };
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // Theme Toggle
+            const themeToggleButton = document.getElementById('theme-toggle-btn');
+            const themeIcon = themeToggleButton.querySelector('i');
+            const htmlElement = document.documentElement;
+
+            function setTheme(theme) {
+                const isLight = theme === 'light';
+                htmlElement.classList.toggle('light-mode', isLight);
+                themeIcon.className = isLight ? 'fas fa-moon' : 'fas fa-sun';
+                localStorage.setItem('theme', theme);
+            }
+            const savedTheme = localStorage.getItem('theme') || 'dark';
+            setTheme(savedTheme);
+            themeToggleButton.addEventListener('click', () => setTheme(htmlElement.classList.contains('light-mode') ? 'dark' : 'light'));
+
+            // Navbar Scroll Effect
+            window.addEventListener('scroll', () => {
+                document.documentElement.setAttribute('data-scrolled', window.scrollY > 30);
+            });
+            
+            // Chat Input Auto-resize
+            const chatInput = document.getElementById('chatInput');
+            chatInput.addEventListener('input', () => {
+                chatInput.style.height = 'auto';
+                chatInput.style.height = `${Math.min(chatInput.scrollHeight, 120)}px`;
+            });
+            chatInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    sendMessage();
+                }
+            });
+
+            // Initialize Page
+            initializePage();
+        });
+        
+        function initializePage() {
+            loadProgress();
+            renderProgressStats();
+            renderCategoryCards();
+            showContent(Object.keys(cseTopicsData)[0]); // Show first category by default
+        }
+
+        function renderProgressStats() {
+            const container = document.getElementById('progressStats');
+            if (!container) return;
+            container.innerHTML = Object.entries(cseTopicsData).map(([key, category]) => {
+                const completedCount = category.topics.filter(t => t.completed).length;
+                const totalCount = category.topics.length;
+                const percentage = totalCount > 0 ? Math.round((completedCount / totalCount) * 100) : 0;
+                return `
+                    <div class="progress-item">
+                        <div class="progress-circle" style="--progress: ${percentage * 3.6}deg;">
+                            <div class="progress-value">${percentage}%</div>
+                        </div>
+                        <h3>${category.title}</h3>
+                        <p>${completedCount} of ${totalCount} Covered</p>
+                    </div>`;
+            }).join('');
+        }
+
+        function renderCategoryCards() {
+            const container = document.getElementById('categories');
+            if (!container) return;
+            container.innerHTML = Object.entries(cseTopicsData).map(([key, category]) => {
+                const completedCount = category.topics.filter(t => t.completed).length;
+                const totalCount = category.topics.length;
+                return `
+                    <div class="category-card card-base" onclick="showContent('${key}')">
+                        <div class="category-icon"><i class="${category.icon}"></i></div>
+                        <h3>${category.title}</h3>
+                        <p>${totalCount} Core Topics</p>
+                        <div class="category-stats">
+                            <div class="stat"><span class="stat-number">${completedCount}</span> Done</div>
+                            <div class="stat"><span class="stat-number">${totalCount}</span> Total</div>
+                        </div>
+                    </div>`;
+            }).join('');
+        }
+
+        function showContent(categoryKey) {
+            const contentSection = document.getElementById('content-section');
+            const titleEl = document.getElementById('section-title');
+            const topicsListEl = document.getElementById('topics-list');
+            
+            if (!contentSection || !titleEl || !topicsListEl) return;
+            
+            const category = cseTopicsData[categoryKey];
+            if (!category) return;
+            
+            titleEl.textContent = category.title;
+            topicsListEl.innerHTML = category.topics.map(topic => {
+                const isCompleted = topic.completed;
+                return `
+                    <div class="topic-item" id="topic-${topic.id}">
+                        <div class="topic-header">
+                            <h3 class="topic-title">${topic.name}</h3>
+                            <div class="topic-notes-preview">${stripHtml(topic.notes)}</div>
+                        </div>
+                        <div class="topic-actions">
+                            <button class="btn" onclick="toggleNotes('${topic.id}')">View Notes</button>
+                            <button class="btn btn-primary ${isCompleted ? 'completed' : ''}" onclick="markTopicComplete('${categoryKey}', '${topic.id}')" ${isCompleted ? 'disabled' : ''}>
+                                ${isCompleted ? '✓ Completed' : 'Mark Complete'}
+                            </button>
+                        </div>
+                        <div class="topic-notes-full" id="notes-${topic.id}">${topic.notes}</div>
+                    </div>`;
+            }).join('');
+
+            contentSection.classList.add('active');
+            contentSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+        
+        function stripHtml(html){
+           let doc = new DOMParser().parseFromString(html, 'text/html');
+           return doc.body.textContent || "";
+        }
+
+        function toggleNotes(topicId) {
+            const notesElement = document.getElementById(`notes-${topicId}`);
+            const topicElement = document.getElementById(`topic-${topicId}`);
+            if (notesElement && topicElement) {
+                notesElement.classList.toggle('active');
+                topicElement.querySelector('.btn').textContent = notesElement.classList.contains('active') ? 'Hide Notes' : 'View Notes';
+            }
+        }
+        
+        function markTopicComplete(categoryKey, topicId) {
+            const topic = cseTopicsData[categoryKey]?.topics.find(t => t.id === topicId);
+            if (topic && !topic.completed) {
+                topic.completed = true;
+                saveProgress();
+                renderProgressStats();
+                renderCategoryCards();
+                // Re-render content to update button state
+                showContent(categoryKey);
+            }
+        }
+
+        function loadProgress() {
+            const savedProgress = JSON.parse(localStorage.getItem('cseProgress') || '{}');
+            for (const categoryKey in cseTopicsData) {
+                if (savedProgress[categoryKey]) {
+                    cseTopicsData[categoryKey].topics.forEach(topic => {
+                        const savedTopic = savedProgress[categoryKey].topics.find(t => t.id === topic.id);
+                        if (savedTopic) {
+                            topic.completed = savedTopic.completed;
+                        }
+                    });
+                }
+            }
+        }
+
+        function saveProgress() {
+            const progressToSave = {};
+            for (const categoryKey in cseTopicsData) {
+                progressToSave[categoryKey] = {
+                    topics: cseTopicsData[categoryKey].topics.map(t => ({ id: t.id, completed: t.completed || false }))
+                };
+            }
+            localStorage.setItem('cseProgress', JSON.stringify(progressToSave));
+        }
+
+        // --- AI Chatbot Functions ---
+        let chatHistory = [];
+        let isProcessing = false;
+
+        function openChat() { document.getElementById('chatModal').classList.add('active'); document.getElementById('chatInput').focus(); }
+        function closeChat() { document.getElementById('chatModal').classList.remove('active'); }
+
+        async function sendMessage() {
+            const input = document.getElementById('chatInput');
+            const message = input.value.trim();
+            if (!message || isProcessing) return;
+
+            addMessage(`<p>${message}</p>`, 'user');
+            input.value = '';
+            
+            const loadingId = addLoadingMessage();
+            
+            try {
+                isProcessing = true;
+                const response = await getGoogleAIResponse(message);
+                addMessage(response, 'bot');
+            } catch (error) {
+                addMessage(error.message, 'bot');
+                console.error('AI Response Error:', error);
+            } finally {
+                removeLoadingMessage(loadingId);
+                isProcessing = false;
+            }
+        }
+
+        function addMessage(html, sender) {
+            const messagesContainer = document.getElementById('chatMessages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${sender}`;
+            messageDiv.innerHTML = html;
+            messagesContainer.appendChild(messageDiv);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+            chatHistory.push({ sender, text: html });
+        }
+
+        function addLoadingMessage() {
+            const loadingId = 'loading-' + Date.now();
+            addMessage(`<div id="${loadingId}" class="loading-dots"><span></span><span></span><span></span></div>`, 'bot loading');
+            return loadingId;
+        }
+
+        function removeLoadingMessage(loadingId) {
+            const loadingElement = document.getElementById(loadingId);
+            if (loadingElement) loadingElement.parentElement.remove();
+        }
+
+        async function getGoogleAIResponse(userMessage) {
+            const API_KEY = 'AIzaSyDxTwXNxyyvpuY2upCxjKGelJLYb7qUz0Q';
+            const API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent';
+            
+            if (API_KEY === 'YOUR_GOOGLE_API_KEY') {
+                throw new Error('<strong>Live AI is not configured.</strong><br>Please add your Google API key.');
+            }
+
+            const prompt = `You are a powerful AI assistant, like a mini Gemini, specializing in Computer Science and Artificial Intelligence. Your purpose is to be a comprehensive knowledge engine for university students. Your tone should be helpful, encouraging, and clear. Provide a detailed, educational response for the user query: "${userMessage}". Structure your response using markdown for readability (headings, bold, lists). If the topic is outside of CS/AI, politely decline.`;
+            
+            let response;
+            try {
+                response = await fetch(`${API_URL}?key=${API_KEY}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
+                });
+            } catch (networkError) {
+                console.error("Network Error:", networkError);
+                throw new Error("<strong>Network Error</strong><br>Could not connect to the AI service. Please check your internet connection.");
+            }
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                console.error("Google AI API Error:", errorData);
+                let errorMessage = `<strong>AI Service Error (${response.status})</strong><br>`;
+                switch (response.status) {
+                    case 400: errorMessage += "The request was malformed, likely due to an API key issue."; break;
+                    case 403: errorMessage += "The request was forbidden. Check API key permissions."; break;
+                    case 404: errorMessage += "The API endpoint was not found. Check the model name."; break;
+                    case 429: errorMessage += "API usage quota exceeded."; break;
+                    default: errorMessage += "An unexpected error occurred.";
+                }
+                throw new Error(errorMessage);
+            }
+
+            const data = await response.json();
+            
+            if (!data.candidates || data.candidates.length === 0 || !data.candidates[0].content) {
+                throw new Error('<strong>No Content from AI</strong><br>The AI returned an empty response, possibly due to safety filters.');
+            }
+
+            let responseText = data.candidates[0].content.parts[0].text;
+            
+            return responseText
+                .replace(/</g, "&lt;").replace(/>/g, "&gt;")
+                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                .replace(/`([^`]+)`/g, '<code>$1</code>')
+                .replace(/^### (.*$)/gim, '<h4>$1</h4>')
+                .replace(/^## (.*$)/gim, '<h3>$1</h3>')
+                .replace(/^# (.*$)/gim, '<h2>$1</h2>')
+                .replace(/^\* (.*$)/gim, '<ul><li>$1</li></ul>')
+                .replace(/<\/ul>\s?<ul>/g, '')
+                .replace(/\n/g, '<br>');
+        }
+    </script>
+</body>
+</html>
