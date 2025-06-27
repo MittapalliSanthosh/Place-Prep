@@ -46,6 +46,11 @@ Final_Project/
 ├── NEW_PROJECT/
 │   ├── server.js                 # Main server file
 │   ├── package.json              # Dependencies and scripts
+│   ├── package-lock.json         # Dependencies lock file
+│   ├── .gitignore                # Git ignore file
+│   ├── README.md                 # This README file
+│   ├── .env                      # Environment variables (not committed)
+│   ├── serviceAccountKey.json    # Service account key (not committed)
 │   ├── models/                   # Database models
 │   │   ├── Question.js
 │   │   ├── MockTestProgress.js
@@ -53,23 +58,37 @@ Final_Project/
 │   │   └── Note.js
 │   ├── utils/
 │   │   └── emailService.js       # Email functionality
-│   ├── PART_2/
-│   │   └── HTML/                 # Frontend files
-│   │       ├── landingpage.html  # Homepage
-│   │       ├── login.html        # Authentication
-│   │       ├── placement_website.html # Main dashboard
-│   │       ├── mocktest.html     # Mock test interface
-│   │       ├── interview.html    # Interview preparation
-│   │       ├── notes.html        # Notes management
-│   │       ├── profile.html      # User profile
-│   │       ├── cse_department.html
-│   │       ├── ece_department.html
-│   │       ├── eee_department.html
-│   │       ├── civil_department.html
-│   │       ├── mechanical_department.html
-│   │       └── chemical_department.html
-│   │       ├── css/              # Stylesheets
-│   │       └── js/               # JavaScript modules
+│   ├── HTML/
+│   │   ├── landingpage.html      # Homepage
+│   │   ├── login.html            # Authentication
+│   │   ├── signup.html           # Signup page
+│   │   ├── placement_website.html # Main dashboard
+│   │   ├── mocktest.html         # Mock test interface
+│   │   ├── module.html           # Module selection
+│   │   ├── interview.html        # Interview preparation
+│   │   ├── notes.html            # Notes management
+│   │   ├── profile.html          # User profile
+│   │   ├── shownotes.html        # Show notes
+│   │   ├── code.html             # Code display
+│   │   ├── Civil_department.html # Civil department
+│   │   ├── cse_department.html   # CSE department
+│   │   ├── ece_department.html   # ECE department
+│   │   ├── mechanical_department.html # Mechanical department
+│   │   ├── chemical.html         # Chemical department
+│   │   ├── electrical.html       # Electrical department
+│   │   ├── apptitude.html        # Aptitude test
+│   │   ├── 404.html             # 404 error page
+│   │   └── js/                 # JavaScript modules
+│   │       ├── aptitude_data.js  # Aptitude test data
+│   │       ├── chemical_data.js  # Chemical department data
+│   │       ├── civil_data.js     # Civil department data
+│   │       ├── cse_data.js       # CSE department data
+│   │       ├── ece_data.js       # ECE department data
+│   │       ├── electrical_data.js # Electrical department data
+│   │       ├── interview_data.js  # Interview data
+│   │       ├── mechanical_data.js # Mechanical department data
+│   │       ├── mocktest_data.js   # Mock test data
+│   │       └── notes_data.js      # Notes data
 │   ├── checkDatabase.js          # Database verification
 │   ├── importQuestions.js        # Data import utility
 │   ├── resetDatabase.js          # Database reset utility
@@ -81,15 +100,16 @@ Final_Project/
 ### Prerequisites
 - Node.js (v14 or higher)
 - npm (v6 or higher)
-- Firebase account
-- MongoDB (optional, Firebase is used as primary database)
+- MongoDB Atlas or local MongoDB
+- Google Cloud account (for Gemini API)
+- (Optional) Firebase for authentication
 
 ### Installation
 
 1. **Clone the repository**
    ```bash
-   git clone <repository-url>
-   cd Final_Project/NEW_PROJECT
+   git clone https://github.com/MittapalliSanthosh/Place-Prep.git
+   cd Place-Prep
    ```
 
 2. **Install dependencies**
@@ -97,33 +117,39 @@ Final_Project/
    npm install
    ```
 
-3. **Firebase Setup**
-   - Create a new Firebase project
-   - Enable Authentication (Google provider)
-   - Set up Firestore Database
-   - Download `serviceAccountKey.json` and place it in the project root
+3. **Environment Configuration**
+   - Create a `.env` file in the root directory:
+     ```
+     GEMINI_API_KEY=your-google-gemini-api-key
+     MONGODB_URI=your-mongodb-uri
+     GOOGLE_CLIENT_ID=your-google-client-id
+     ```
+   - Do **not** commit `.env` to GitHub.
 
-4. **Environment Configuration**
-   - Update Firebase configuration in `server.js`
-   - Set up email service credentials in `utils/emailService.js`
-
-5. **Database Setup**
+4. **Database Setup**
    ```bash
-   # Import questions and seed data
    node importQuestions.js
    node seedAssessments.js
    ```
 
-6. **Start the server**
+5. **Start the server**
    ```bash
    npm start
    # or
    node server.js
    ```
 
-7. **Access the application**
+6. **Access the application**
    - Open `http://localhost:3000` in your browser
-   - Navigate to `PART_2/HTML/landingpage.html`
+   - Navigate to `HTML/landingpage.html`
+
+## 🌐 Deployment (Render)
+
+1. Push your code to GitHub.
+2. Create a new Web Service on [Render](https://render.com/).
+3. Connect your GitHub repo.
+4. Set environment variables (`GEMINI_API_KEY`, `MONGODB_URI`, etc.) in the Render dashboard.
+5. Deploy!
 
 ## 📖 Usage Guide
 
@@ -161,7 +187,7 @@ Final_Project/
 ## 🎨 Customization
 
 ### Adding New Departments
-1. Create department HTML file in `PART_2/HTML/`
+1. Create department HTML file in `HTML/`
 2. Add corresponding JavaScript data file
 3. Update navigation links
 4. Add department-specific questions to database
