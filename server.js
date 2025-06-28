@@ -370,6 +370,11 @@ app.post('/api/auth/google', async (req, res) => {
             await user.save();
         }
 
+        if (!user || !user.email) {
+            showError('Google account did not return an email. Please try a different account.');
+            return;
+        }
+
         // Return user data
         res.json({
             message: 'Google authentication successful',
