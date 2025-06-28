@@ -1050,6 +1050,30 @@
                 gap: 0.2rem;
             }
         }
+
+        .close-mobile-nav {
+            display: none;
+            position: absolute;
+            top: 1.2rem;
+            right: 1.2rem;
+            background: none;
+            border: none;
+            font-size: 2.2rem;
+            color: var(--accent-primary);
+            cursor: pointer;
+            z-index: 1300;
+            line-height: 1;
+            padding: 0;
+            transition: color 0.2s;
+        }
+        .close-mobile-nav:hover {
+            color: #d97706;
+        }
+        @media (max-width: 900px) {
+            .close-mobile-nav {
+                display: block !important;
+            }
+        }
     </style>
 </head>
 <body> <!-- The 'light-mode' class will be added here by JS -->
@@ -1063,10 +1087,11 @@
     <nav class="navbar">
         <div class="nav-container">
             <a href="#" class="logo">PlacePrep</a>
-            <button class="hamburger" id="hamburger-menu" aria-label="Open navigation" tabindex="0" style="display:none">
+            <button class="hamburger" id="hamburger-menu" aria-label="Open navigation" tabindex="0">
                 <span></span><span></span><span></span>
             </button>
             <ul class="nav-links" id="main-nav-links">
+                <button class="close-mobile-nav" id="close-mobile-nav" aria-label="Close navigation" tabindex="0" style="display:none">&times;</button>
                 <li><a href="#home"><i class="fas fa-home"></i> Home</a></li>
                 <li><a href="#features"><i class="fas fa-star"></i> Features</a></li>
                 <li><a href="#departments"><i class="fas fa-building"></i> Departments</a></li>
@@ -1387,6 +1412,7 @@
             const hamburger = document.getElementById('hamburger-menu');
             const navLinks = document.getElementById('main-nav-links');
             const overlay = document.getElementById('mobile-nav-overlay');
+            const closeBtn = document.getElementById('close-mobile-nav');
 
             function openMenu() {
                 navLinks.classList.add('open');
@@ -1400,6 +1426,7 @@
             }
             hamburger.addEventListener('click', openMenu);
             overlay.addEventListener('click', closeMenu);
+            if (closeBtn) closeBtn.addEventListener('click', closeMenu);
             // Close on ESC
             document.addEventListener('keydown', function(e) {
                 if (e.key === 'Escape') closeMenu();
