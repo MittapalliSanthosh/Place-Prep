@@ -10,160 +10,186 @@
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <style>
         :root {
-            /* Landing Page Specific Theme - Based on the Image */
-            --lp-bg: linear-gradient(135deg, #FFF0F5 0%, #E6E6FA 60%, #FFF5EE 100%); /* Lavender, Seashell, LavenderBlush like gradient */
-            --lp-text-primary: #2D3748; /* Dark Gray/Slate for main text */
-            --lp-text-secondary: #4A5568; /* Medium Gray/Slate for subtext */
-            --lp-text-logo: #6B46C1; /* Deep Purple for "PlacePrep" in logo */
-            --lp-accent-primary: #FF69B4; /* Hot Pink for "Get Started Free" */
-            --lp-accent-primary-hover: #FF3E9E;
-            --lp-accent-secondary: #F97316; /* Orange for "Enter the Gateway" & sub-badge */
-            --lp-accent-secondary-hover: #EA580C;
-            --lp-btn-signin-border: #A0AEC0; /* Gray for "Sign In" button border */
-            --lp-btn-signin-text: var(--lp-text-secondary);
-            --lp-btn-signin-hover-bg: #EDF2F7; /* Very light gray */
+            /* --- Light Theme (Default) --- */
+            --bg-color: #f7f5ff;
+            --text-primary: #2D3748;
+            --text-secondary: #4A5568;
+            --text-logo: #6B46C1;
+            --accent-primary: #FF69B4; 
+            --accent-primary-hover: #FF3E9E;
+            --accent-secondary: #F97316;
+            --accent-secondary-hover: #EA580C;
+            --btn-signin-border: #CBD5E0;
+            --btn-signin-text: var(--text-secondary);
+            --btn-signin-bg: #FFFFFF;
+            --btn-signin-hover-bg: #EDF2F7;
+            --sub-badge-bg: rgba(255, 105, 180, 0.1);
+            --sub-badge-border: rgba(255, 105, 180, 0.2);
+            --sub-badge-glow: rgba(255, 105, 180, 0.4);
+            --theme-toggle-icon-color: #F97316;
+            --h1-gradient: linear-gradient(90deg, #db2777, #c026d3, #7c3aed, #db2777);
+            --blob-1-color: #FFC0CB; /* Pink */
+            --blob-2-color: #DDA0DD; /* Plum */
 
             --font-main: 'Poppins', sans-serif;
             --font-heading: 'Orbitron', sans-serif;
+        }
+
+        body.dark-theme {
+            /* --- Dark Theme --- */
+            --bg-color: #0d1117;
+            --text-primary: #E2E8F0;
+            --text-secondary: #A0AEC0;
+            --text-logo: #D6BCFA;
+            --accent-primary: #22d3ee;
+            --accent-primary-hover: #06b6d4;
+            --accent-secondary: #fb923c;
+            --accent-secondary-hover: #f97316;
+            --btn-signin-border: #30363d;
+            --btn-signin-text: var(--text-primary);
+            --btn-signin-bg: #21262d;
+            --btn-signin-hover-bg: #30363d;
+            --sub-badge-bg: rgba(251, 146, 60, 0.1);
+            --sub-badge-border: rgba(251, 146, 60, 0.2);
+            --sub-badge-glow: rgba(251, 146, 60, 0.5);
+            --theme-toggle-icon-color: #fbde2d;
+            --h1-gradient: linear-gradient(90deg, #f87171, #fb923c, #22d3ee, #f87171);
+            --blob-1-color: #302b63;
+            --blob-2-color: #4a044e; /* Dark Purple */
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
             font-family: var(--font-main);
-            background: var(--lp-bg);
-            color: var(--lp-text-primary);
+            background-color: var(--bg-color);
+            color: var(--text-primary);
             line-height: 1.7;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
             overflow-x: hidden;
+            position: relative;
+            transition: background-color 0.5s ease, color 0.5s ease;
+        }
+
+        body::before, body::after {
+            content: ''; position: absolute; left: 0; top: 0;
+            width: 30vw; height: 30vw; max-width: 400px; max-height: 400px;
+            border-radius: 50%; filter: blur(100px);
+            z-index: -1; transition: background-color 0.8s ease;
+        }
+        body::before { background-color: var(--blob-1-color); animation: float-blob-1 15s infinite ease-in-out; }
+        body::after { background-color: var(--blob-2-color); animation: float-blob-2 20s infinite ease-in-out; }
+
+        @keyframes float-blob-1 {
+            0% { transform: translate(10vw, 10vh) scale(1); }
+            50% { transform: translate(60vw, 70vh) scale(1.2); }
+            100% { transform: translate(10vw, 10vh) scale(1); }
+        }
+        @keyframes float-blob-2 {
+            0% { transform: translate(80vw, 80vh) scale(1); }
+            50% { transform: translate(20vw, 20vh) scale(0.8); }
+            100% { transform: translate(80vw, 80vh) scale(1); }
+        }
+        
+        h1, p, .landing-logo, .landing-nav-actions a, .sub-badge, .cta-button-landing, .logo-prep {
+            transition: color 0.5s ease, background-color 0.5s ease, border-color 0.5s ease, box-shadow 0.3s ease;
         }
 
         .landing-navbar {
-            padding: 1.5rem 0; width: 100%;
-            position: absolute; top: 0; left: 0; z-index: 1000;
-            background: transparent; 
+            padding: 1.5rem 0; width: 100%; position: fixed; top: 0; left: 0; z-index: 1000;
+            transition: background-color 0.3s ease, backdrop-filter 0.3s ease, box-shadow 0.3s ease;
         }
-        .landing-nav-container {
-            max-width: 1200px; margin: 0 auto; display: flex;
-            justify-content: space-between; align-items: center; padding: 0 2rem;
+        .navbar-scrolled {
+            background-color: rgba(255, 255, 255, 0.1); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
         }
-        .landing-logo {
-            font-size: 2.2rem; font-weight: 900;
-            font-family: var(--font-heading);
-            color: var(--lp-text-logo);
-            text-decoration: none;
-            letter-spacing: 1px;
-        }
-        /* Styling for the 'Prep' part of the logo if different color desired */
-        .landing-logo .logo-prep {
-            color: var(--lp-accent-primary); /* Making 'Prep' part Orange like buttons */
-        }
+        .dark-theme .navbar-scrolled { background-color: rgba(20, 20, 30, 0.2); box-shadow: 0 2px 10px rgba(0,0,0,0.2); }
 
-        .landing-nav-actions a, .landing-nav-actions button { /* Targeting both if you use button for toggle */
+        .landing-nav-container { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; padding: 0 2rem; }
+        .landing-logo { font-size: 2.2rem; font-weight: 900; font-family: var(--font-heading); color: var(--text-logo); text-decoration: none; letter-spacing: 1px; }
+        .landing-logo .logo-prep { color: var(--accent-secondary); }
+
+        .landing-nav-actions { display: flex; align-items: center; gap: 0.75rem; }
+        .landing-nav-actions a {
             padding: 0.6rem 1.5rem; border-radius: 50px; text-decoration: none;
             font-weight: 600; font-size: 0.85rem; transition: all 0.25s ease;
-            display: inline-flex; align-items: center; gap: 0.5rem;
-            border: 2px solid transparent; /* Base border */
-            cursor: pointer;
+            display: inline-flex; align-items: center; gap: 0.5rem; border: 2px solid transparent; cursor: pointer;
         }
-        .landing-nav-actions .btn-login {
-            background: var(--white-color);
-            color: var(--lp-text-secondary);
-            border-color: var(--lp-btn-signin-border);
-            margin-right: 0.75rem;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-        }
-        .landing-nav-actions .btn-login:hover {
-            background: var(--lp-btn-signin-hover-bg);
-            border-color: var(--lp-text-secondary);
-            transform: translateY(-1px);
-        }
-        .landing-nav-actions .btn-signup {
-            background: var(--lp-accent-primary);
-            color: var(--white-color);
-            border-color: var(--lp-accent-primary);
-            box-shadow: 0 4px 12px rgba(255,105,180, 0.3);
-        }
-        .landing-nav-actions .btn-signup:hover {
-            background: var(--lp-accent-primary-hover);
-            border-color: var(--lp-accent-primary-hover);
-            transform: translateY(-2px);
-            box-shadow: 0 6px 15px rgba(255,105,180, 0.4);
-        }
+        .landing-nav-actions .btn-login { background-color: var(--btn-signin-bg); color: var(--btn-signin-text); border-color: var(--btn-signin-border); box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        .landing-nav-actions .btn-login:hover { background: var(--btn-signin-hover-bg); border-color: var(--text-secondary); transform: translateY(-1px); }
+        .landing-nav-actions .btn-signup { background: var(--accent-primary); color: white; border-color: var(--accent-primary); box-shadow: 0 4px 12px rgba(from var(--accent-primary) r g b / 0.3); }
+        .landing-nav-actions .btn-signup:hover { background: var(--accent-primary-hover); border-color: var(--accent-primary-hover); transform: translateY(-2px); box-shadow: 0 6px 15px rgba(from var(--accent-primary) r g b / 0.4); }
         
-        .landing-hero {
-            display: flex; flex-direction: column; align-items: center;
-            justify-content: center; flex-grow: 1; /* Takes remaining space */
-            text-align: center; padding: 8rem 2rem 3rem; /* Increased top padding */
-            position: relative; overflow: hidden; 
+        /* --- ✨ MOVED: Theme Toggle styling moved to a floating container --- */
+        .theme-toggle-container {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            z-index: 999;
         }
-        /* Removed ::before aurora for the very light theme as per image */
+        .theme-toggle-btn {
+            background: var(--btn-signin-bg); border: 2px solid var(--btn-signin-border);
+            width: 52px; height: 52px; border-radius: 50%; cursor: pointer;
+            display: flex; justify-content: center; align-items: center;
+            position: relative; overflow: hidden; 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+        .dark-theme .theme-toggle-btn { box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
+        .theme-toggle-btn:hover {
+             border-color: var(--text-secondary); transform: translateY(-4px) rotate(15deg) scale(1.05);
+             box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+        }
+        .dark-theme .theme-toggle-btn:hover { box-shadow: 0 6px 20px rgba(0,0,0,0.4); }
 
-        .hero-content-landing { max-width: 750px; z-index: 1; }
-        .hero-content-landing .sub-badge {
-            display: inline-block;
-            background-color: rgba(255, 105, 180, 0.1); /* Light Pinkish-Orange */
-            color: var(--lp-accent-secondary); /* Main CTA orange for text */
-            padding: 0.45rem 1.2rem; border-radius: 50px;
-            font-size: 0.8rem; font-weight: 600; margin-bottom: 1.8rem;
-            letter-spacing: 0.5px; border: 1px solid rgba(255, 105, 180, 0.2);
+        .theme-toggle-btn .theme-icon { font-size: 1.3rem; position: absolute; color: var(--theme-toggle-icon-color); transition: transform 0.4s cubic-bezier(0.45, 0.05, 0.55, 0.95), opacity 0.3s ease; }
+        .theme-icon-dark { transform: translateY(0) rotate(0deg); opacity: 1; }
+        .theme-icon-light { transform: translateY(120%) rotate(-90deg); opacity: 0; }
+        .dark-theme .theme-icon-dark { transform: translateY(-120%) rotate(90deg); opacity: 0;}
+        .dark-theme .theme-icon-light { transform: translateY(0) rotate(0deg); opacity: 1; }
+
+        .landing-hero { display: flex; flex-direction: column; align-items: center; justify-content: center; flex-grow: 1; text-align: center; padding: 10rem 2rem 4rem; position: relative; }
+        .hero-content-landing { max-width: 800px; z-index: 1; }
+        .hero-content-landing .sub-badge { display: inline-block; background-color: var(--sub-badge-bg); color: var(--accent-secondary); padding: 0.45rem 1.2rem; border-radius: 50px; font-size: 0.8rem; font-weight: 600; margin-bottom: 1.8rem; letter-spacing: 0.5px; border: 1px solid var(--sub-badge-border); animation: pulse-glow 3s infinite ease-in-out; }
+        @keyframes pulse-glow {
+            0%, 100% { box-shadow: 0 0 10px 0px rgba(from var(--sub-badge-glow) r g b / 0); }
+            50% { box-shadow: 0 0 20px 5px rgba(from var(--sub-badge-glow) r g b / 1); }
         }
         .hero-content-landing .sub-badge i { margin-left: 0.3rem; }
-
-        .hero-content-landing h1 {
-            font-family: var(--font-heading);
-            font-size: clamp(2.8rem, 7vw, 4.2rem); /* Slightly adjusted max size */
-            font-weight: 800; 
-            color: var(--lp-text-primary);
-            line-height: 1.15; margin-bottom: 1.5rem;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.05); /* Very subtle shadow for depth */
-        }
-        
-        .hero-content-landing p.subtitle {
-            font-size: clamp(1rem, 2.5vw, 1.2rem); /* Adjusted */
-            color: var(--lp-text-secondary);
-            margin-bottom: 2.5rem; max-width: 650px; 
-            margin-left: auto; margin-right: auto; opacity: 0.95;
-        }
-        .cta-button-landing {
-            padding: 0.9rem 2.8rem; font-size: 1.05rem; border-radius: 50px;
-            text-decoration: none; font-weight: 700;
-            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            background: var(--lp-accent-secondary);
-            color: white;
-            box-shadow: 0 5px 18px rgba(249,115,22, 0.35); 
-            display: inline-flex; align-items: center; justify-content: center; gap: 0.6rem;
-            letter-spacing: 0.3px;
-        }
-        .cta-button-landing:hover {
-            transform: translateY(-3px) scale(1.02);
-            background: var(--lp-accent-secondary-hover); /* Assuming an orange hover */
-            box-shadow: 0 8px 22px rgba(249,115,22, 0.45);
-        }
+        .hero-content-landing h1 { font-family: var(--font-heading); font-size: clamp(3rem, 7vw, 4.5rem); font-weight: 900; line-height: 1.15; margin-bottom: 1.5rem; text-shadow: 1px 1px 15px rgba(from var(--text-logo) r g b / 0.1); color: transparent; background: var(--h1-gradient); background-size: 200% auto; -webkit-background-clip: text; background-clip: text; animation: pan-gradient 6s linear infinite; }
+        @keyframes pan-gradient { to { background-position: 200% center; } }
+        .hero-content-landing p.subtitle { font-size: clamp(1rem, 2.5vw, 1.2rem); color: var(--text-secondary); margin-bottom: 2.5rem; max-width: 650px; margin-left: auto; margin-right: auto; opacity: 0.95; }
+        .cta-button-landing { padding: 0.9rem 2.8rem; font-size: 1.05rem; border-radius: 50px; text-decoration: none; font-weight: 700; transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); background: var(--accent-secondary); color: white; box-shadow: 0 5px 18px rgba(from var(--accent-secondary) r g b / 0.35); display: inline-flex; align-items: center; justify-content: center; gap: 0.6rem; letter-spacing: 0.3px; position: relative; overflow: hidden; }
+        .cta-button-landing::before { content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: linear-gradient(110deg, transparent 20%, rgba(255, 255, 255, 0.4) 50%, transparent 80%); transform: skewX(-25deg); transition: left 0.7s cubic-bezier(0.77, 0, 0.18, 1); }
+        .cta-button-landing:hover::before { left: 100%; }
+        .cta-button-landing:hover { transform: translateY(-3px) scale(1.02); background: var(--accent-secondary-hover); box-shadow: 0 8px 22px rgba(from var(--accent-secondary) r g b / 0.45); }
         .cta-button-landing i { transition: transform 0.3s ease; }
         .cta-button-landing:hover i { transform: translateX(4px); }
         
-        /* Removed landing-theme-toggle CSS as the button is removed */
-
+        @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; } }
+        
         @media (max-width: 768px) {
             .landing-nav-container { padding: 0 1rem; }
             .landing-logo { font-size: 1.8rem; }
-            .landing-nav-actions { display: none; } /* Hide for very simple mobile landing */
-            .landing-hero { padding-top: 4rem; } /* Less top padding if nav actions are hidden */
-            .hero-content-landing h1 { font-size: clamp(2.2rem, 9vw, 3.2rem); }
-            .hero-content-landing p.subtitle { font-size: clamp(0.9rem, 4vw, 1.05rem); margin-bottom: 2rem;}
-            .cta-button-landing { padding: 0.8rem 2.2rem; font-size: 0.95rem; }
-        }
+            /* ✨ Show nav buttons on mobile, but make them smaller */
+            .landing-nav-actions { gap: 0.5rem; }
+            .landing-nav-actions a { padding: 0.5rem 1rem; font-size: 0.75rem; }
 
+            .landing-hero { padding-top: 8rem; }
+            .hero-content-landing h1 { font-size: clamp(2.4rem, 10vw, 3.5rem); }
+            /* ✨ Adjust floating button position for mobile */
+            .theme-toggle-container { bottom: 1rem; right: 1rem; }
+        }
     </style>
 </head>
 <body>
-    <nav class="landing-navbar">
+    <nav class="landing-navbar" id="main-navbar">
         <div class="landing-nav-container">
             <a href="#" class="landing-logo">Place<span class="logo-prep">Prep</span></a>
             <div class="landing-nav-actions">
+                <!-- Theme toggle button has been moved -->
                 <a href="login.html" class="btn-login">Sign In</a>
                 <a href="signup.html" class="btn-signup">Get Started Free</a>
             </div>
@@ -183,16 +209,48 @@
         </div>
     </main>
     
-    <!-- Theme toggle button is removed from HTML as this page has a fixed theme -->
+    <!-- ✨ MOVED: Theme Toggle Button is now here in its own container -->
+    <div class="theme-toggle-container">
+        <button id="theme-toggle" class="theme-toggle-btn" aria-label="Toggle theme">
+            <i class="fas fa-moon theme-icon theme-icon-dark"></i>
+            <i class="fas fa-sun theme-icon theme-icon-light"></i>
+        </button>
+    </div>
 
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
-        AOS.init({
-            duration: 800,
-            once: true,
+        // --- AOS Animation Initialization ---
+        AOS.init({ duration: 800, once: true });
+
+        // --- Theme Toggle Logic ---
+        const themeToggleBtn = document.getElementById('theme-toggle');
+        const body = document.body;
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.add('dark-theme');
+                themeToggleBtn.setAttribute('aria-label', 'Switch to light theme');
+            } else {
+                body.classList.remove('dark-theme');
+                themeToggleBtn.setAttribute('aria-label', 'Switch to dark theme');
+            }
+        };
+        const savedTheme = localStorage.getItem('theme');
+        const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+        if (savedTheme) { applyTheme(savedTheme); } 
+        else { applyTheme(prefersDark ? 'dark' : 'light'); }
+        themeToggleBtn.addEventListener('click', () => {
+            const isDark = body.classList.toggle('dark-theme');
+            const newTheme = isDark ? 'dark' : 'light';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
         });
 
-
+        // --- Navbar Scroll Listener ---
+        const navbar = document.getElementById('main-navbar');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 30) { navbar.classList.add('navbar-scrolled'); } 
+            else { navbar.classList.remove('navbar-scrolled'); }
+        });
     </script>
 </body>
 </html>
