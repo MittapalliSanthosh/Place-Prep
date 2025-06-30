@@ -1090,6 +1090,142 @@
                 display: block !important;
             }
         }
+
+        .new-footer {
+            background: var(--bg-footer);
+            color: var(--text-footer);
+            border-top: 1px solid var(--border-footer-top);
+            margin-top: 3rem;
+            padding: 0;
+            font-size: 1rem;
+            letter-spacing: 0.01em;
+            transition: background 0.3s, color 0.3s;
+        }
+        .footer-main {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 3rem 2rem 2rem 2rem;
+            flex-wrap: wrap;
+            gap: 2.5rem;
+        }
+        .footer-col {
+            min-width: 180px;
+            flex: 1 1 180px;
+            margin-bottom: 1.5rem;
+        }
+        .footer-brand {
+            flex: 2 1 320px;
+            max-width: 400px;
+        }
+        .footer-logo {
+            font-size: 2.3rem;
+            font-weight: 700;
+            color: var(--text-logo);
+            margin-bottom: 1.2rem;
+            letter-spacing: 0.01em;
+        }
+        .footer-desc {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+            line-height: 1.5;
+        }
+        .footer-social {
+            display: flex;
+            gap: 1.2rem;
+            margin-top: 0;
+        }
+        .footer-social a {
+            color: var(--text-logo);
+            font-size: 1.5rem;
+            transition: color 0.2s;
+        }
+        .footer-social a:hover {
+            color: var(--accent-primary);
+        }
+        .footer-title {
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 1.1rem;
+            font-size: 1.1rem;
+            letter-spacing: 0.04em;
+        }
+        .footer-col ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .footer-col ul li {
+            margin-bottom: 0.8rem;
+        }
+        .footer-col ul li:last-child {
+            margin-bottom: 0;
+        }
+        .footer-col ul a {
+            color: var(--text-footer);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 1rem;
+            transition: color 0.2s;
+        }
+        .footer-col ul a:hover {
+            color: var(--accent-primary);
+            text-decoration: underline;
+        }
+        .footer-bottom {
+            border-top: 1px solid var(--border-footer-top);
+            text-align: center;
+            color: var(--text-footer);
+            font-size: 1rem;
+            padding: 1.2rem 1rem 0.7rem 1rem;
+            background: none;
+            margin-top: 0;
+        }
+        @media (max-width: 1100px) {
+            .footer-main {
+                flex-wrap: wrap;
+                gap: 2rem;
+            }
+            .footer-col, .footer-brand {
+                min-width: 160px;
+            }
+        }
+        @media (max-width: 900px) {
+            .footer-main {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1.5rem;
+                padding: 2.5rem 1.2rem 1.2rem 1.2rem;
+            }
+            .footer-col, .footer-brand {
+                max-width: 100%;
+                min-width: 0;
+            }
+            .footer-logo {
+                font-size: 2rem;
+            }
+        }
+        @media (max-width: 600px) {
+            .footer-main {
+                padding: 2rem 0.5rem 1rem 0.5rem;
+            }
+            .footer-logo {
+                font-size: 1.5rem;
+            }
+            .footer-desc {
+                font-size: 1rem;
+            }
+            .footer-title {
+                font-size: 1rem;
+            }
+            .footer-bottom {
+                font-size: 0.95rem;
+                padding: 1rem 0.2rem 0.5rem 0.2rem;
+            }
+        }
     </style>
 </head>
 <body> <!-- The 'light-mode' class will be added here by JS -->
@@ -1256,8 +1392,47 @@
     </section>
 
     <!-- Footer -->
-    <footer class="footer">
-        <p>© 2024 PlacePrep. All rights reserved. | Empowering students for successful placements</p>
+    <footer class="footer new-footer">
+        <div class="footer-main">
+            <div class="footer-col footer-brand">
+                <div class="footer-logo">PlacePrep</div>
+                <p class="footer-desc">Your ultimate launchpad for acing campus placements. Prepare smarter, not harder.</p>
+                <div class="footer-social">
+                    <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                    <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                    <a href="#" aria-label="GitHub"><i class="fab fa-github"></i></a>
+                </div>
+            </div>
+            <div class="footer-col">
+                <div class="footer-title">PRODUCT</div>
+                <ul>
+                    <li><a href="#features">Features</a></li>
+                    <li><a href="code.html">Online Compiler</a></li>
+                    <li><a href="#">AI Interviewer</a></li>
+                    <li><a href="#">Progress Tracker</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <div class="footer-title">COMPANY</div>
+                <ul>
+                    <li><a href="#">About Us</a></li>
+                    <li><a href="#">Contact Us</a></li>
+                    <li><a href="#">Privacy Policy</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <div class="footer-title">RESOURCES</div>
+                <ul>
+                    <li><a href="#">Blog</a></li>
+                    <li><a href="#">Success Stories</a></li>
+                    <li><a href="#">Help Center</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            © 2024 PlacePrep. All Rights Reserved. Empowering students for placement success.
+        </div>
     </footer>
 
     <script>
