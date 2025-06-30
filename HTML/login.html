@@ -356,6 +356,15 @@
         .modal-btn.secondary:hover {
             background-color: var(--light-gray-bg);
         }
+
+        /* Additional modal tweaks for password reset */
+        #resetPasswordModal .modal-content {
+            padding: 2rem 1.5rem 1.5rem 1.5rem;
+            text-align: left;
+        }
+        #resetPasswordModal input[type="email"] {
+            font-size: 1rem;
+        }
     </style>
 </head>
 <body>
@@ -413,6 +422,21 @@
                     <button type="submit" class="modal-btn primary">Continue</button>
                 </div>
             </form>
+        </div>
+    </div>
+
+    <!-- Password Reset Modal -->
+    <div id="resetPasswordModal" class="modal-overlay">
+        <div class="modal-content" style="max-width: 400px;">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <h2 style="font-size: 1.3rem; margin-bottom: 0;">Reset Password</h2>
+                <button id="closeResetModal" style="background: none; border: none; font-size: 1.5rem; cursor: pointer;">&times;</button>
+            </div>
+            <form id="resetPasswordForm" style="margin-top: 1.5rem;">
+                <input type="email" id="resetEmail" placeholder="Enter your email" required style="width: 100%; padding: 0.8rem; border-radius: 5px; border: 1px solid #eee; margin-bottom: 1rem;">
+                <button type="submit" class="auth-button" style="width: 100%;">Send Reset Link</button>
+            </form>
+            <div id="resetPasswordMessage" class="message-display" style="margin-top: 1rem;"></div>
         </div>
     </div>
 
@@ -705,6 +729,56 @@
         document.getElementById('loginForm').addEventListener('submit', handleLogin);
         document.getElementById('google-signin-btn').addEventListener('click', handleGoogleSignIn);
         document.getElementById('departmentForm').addEventListener('submit', handleDepartmentSelection);
+
+        // Forgot Password Handler (replaced with custom modal)
+        // document.querySelector('.forgot-password').addEventListener('click', async function(e) { ... });
+
+        // Password Reset Modal Logic
+        const resetModal = document.getElementById('resetPasswordModal');
+        const resetForm = document.getElementById('resetPasswordForm');
+        const resetEmailInput = document.getElementById('resetEmail');
+        const resetMessage = document.getElementById('resetPasswordMessage');
+        const closeResetModalBtn = document.getElementById('closeResetModal');
+
+        // Show modal when 'Forgot your password?' is clicked
+        document.querySelector('.forgot-password').addEventListener('click', function(e) {
+            e.preventDefault();
+            // Pre-fill with email if available
+            resetEmailInput.value = document.getElementById('email').value.trim();
+            resetMessage.style.display = 'none';
+            resetModal.classList.add('active');
+            resetEmailInput.focus();
+        });
+
+        // Close modal
+        closeResetModalBtn.addEventListener('click', function() {
+            resetModal.classList.remove('active');
+            resetForm.reset();
+            resetMessage.style.display = 'none';
+        });
+
+        // Handle password reset form submit
+        resetForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const email = resetEmailInput.value.trim();
+            resetMessage.style.display = 'none';
+            if (!email) {
+                resetMessage.textContent = 'Please enter your email address.';
+                resetMessage.className = 'message-display error-message';
+                resetMessage.style.display = 'block';
+                return;
+            }
+            try {
+                await firebase.auth().sendPasswordResetEmail(email);
+                resetMessage.textContent = 'Password reset email sent! Please check your inbox.';
+                resetMessage.className = 'message-display success-message';
+                resetMessage.style.display = 'block';
+            } catch (error) {
+                resetMessage.textContent = error.message || 'Failed to send password reset email.';
+                resetMessage.className = 'message-display error-message';
+                resetMessage.style.display = 'block';
+            }
+        });
 
         function redirectToSignup() {
             window.location.href = 'signup.html';
