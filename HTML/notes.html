@@ -643,9 +643,6 @@
                             <p class="note-description">${note.content}</p>
                             ${keyPointsHtml}
                             <div class="note-actions">
-                                <button class="edit-note-btn" data-note-id="${note._id}">
-                                    <i class="fas fa-edit"></i> Edit
-                                </button>
                                 <button class="delete-note-btn" data-note-id="${note._id}">
                                     <i class="fas fa-trash"></i> Delete
                                 </button>
@@ -655,14 +652,7 @@
                     container.appendChild(noteCard);
                 });
 
-                // Add event listeners for edit and delete buttons
-                container.querySelectorAll('.edit-note-btn').forEach(btn => {
-                    btn.addEventListener('click', (e) => {
-                        const noteId = e.target.closest('button').dataset.noteId;
-                        editNote(noteId);
-                    });
-                });
-
+                // Add event listeners for delete buttons
                 container.querySelectorAll('.delete-note-btn').forEach(btn => {
                     btn.addEventListener('click', (e) => {
                         const noteId = e.target.closest('button').dataset.noteId;
@@ -671,82 +661,7 @@
                 });
             }
 
-            // Function to edit a note
-            async function editNote(noteId) {
-                try {
-                    const user = firebase.auth().currentUser;
-                    if (!user) {
-                        alert('Please log in to edit notes');
-                        return;
-                    }
 
-                    const idToken = await user.getIdToken();
-                    const response = await fetch(`/api/notes/${noteId}`, {
-                        headers: {
-                            'Authorization': `Bearer ${idToken}`
-                        }
-                    });
-
-                    if (response.ok) {
-                        const note = await response.json();
-                        // Populate the form with note data
-                        document.getElementById('note-title').value = note.title;
-                        document.getElementById('note-description').value = note.description;
-                        document.getElementById('note-category').value = note.category;
-                        document.getElementById('key-points').value = note.keyPoints.join('\n');
-                        
-                        // Show the modal
-                        modal.style.display = 'block';
-                        
-                        // Update form submission to handle edit
-                        addNoteForm.onsubmit = async (e) => {
-                            e.preventDefault();
-                            await updateNote(noteId);
-                        };
-                    }
-                } catch (error) {
-                    console.error('Error fetching note:', error);
-                    alert('Failed to fetch note for editing');
-                }
-            }
-
-            // Function to update a note
-            async function updateNote(noteId) {
-                try {
-                    const user = firebase.auth().currentUser;
-                    const idToken = await user.getIdToken();
-                    
-                    const formData = {
-                        title: document.getElementById('note-title').value,
-                        description: document.getElementById('note-description').value,
-                        category: document.getElementById('note-category').value,
-                        keyPoints: document.getElementById('key-points').value.split('\n').filter(point => point.trim()),
-                    };
-
-                    const response = await fetch(`/api/notes/${noteId}`, {
-                        method: 'PUT',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'Authorization': `Bearer ${idToken}`
-                        },
-                        body: JSON.stringify(formData)
-                    });
-
-                    if (response.ok) {
-                        // Refresh notes
-                        fetchUserNotes();
-                        // Reset form and close modal
-                        addNoteForm.reset();
-                        modal.style.display = 'none';
-                        alert('Note updated successfully!');
-                    } else {
-                        throw new Error('Failed to update note');
-                    }
-                } catch (error) {
-                    console.error('Error updating note:', error);
-                    alert('Failed to update note');
-                }
-            }
 
             // Function to delete a note
             async function deleteNote(noteId) {
@@ -756,12 +671,11 @@
                     const userId = getUserIdOrAlert();
                     if (!userId) return;
                     
-                    const response = await fetch(`/api/notes/${noteId}`, {
+                    const response = await fetch(`/api/notes/${noteId}?userId=${userId}`, {
                         method: 'DELETE',
                         headers: {
                             'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({ userId })
+                        }
                     });
 
                     if (response.ok) {
@@ -788,7 +702,6 @@
                     flex-wrap: wrap;
                 }
 
-                .edit-note-btn,
                 .delete-note-btn {
                     padding: 0.5rem 1rem;
                     border: none;
@@ -800,21 +713,8 @@
                     font-size: 0.9rem;
                     transition: all 0.3s ease;
                     font-weight: 500;
-                }
-
-                .edit-note-btn {
-                    background: var(--accent-primary);
-                    color: white;
-                }
-
-                .delete-note-btn {
                     background: #dc3545;
                     color: white;
-                }
-
-                .edit-note-btn:hover {
-                    background: var(--accent-primary-hover);
-                    transform: translateY(-1px);
                 }
 
                 .delete-note-btn:hover {
