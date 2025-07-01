@@ -18,7 +18,6 @@ const Note = require('./models/Note');
 const InterviewFeedback = require('./models/InterviewFeedback');
 
 // Initialize Firebase Admin with service account
-// Initialize Firebase Admin with service account
 let firebaseAdminInitialized = false;
 try {
     // On Render, the secret file will be available at this path.
@@ -39,17 +38,7 @@ try {
 
 const { OAuth2Client } = require('google-auth-library');
 
-// Check if essential environment variables are loaded
-// Temporarily commented out for testing
-/*
-if (!process.env.GEMINI_API_KEY || !process.env.GOOGLE_CLIENT_ID) {
-    console.error("FATAL ERROR: Required environment variables are not defined.");
-    console.error("Make sure both GEMINI_API_KEY and GOOGLE_CLIENT_ID are in your .env file.");
-    process.exit(1);
-}
-console.log("GEMINI_API_KEY Status: Loaded");
-console.log("GOOGLE_CLIENT_ID Status: Loaded");
-*/
+
 
 // Initialize Google OAuth client
 const googleClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID || 'test_client_id');
